@@ -1,0 +1,35 @@
+model:
+  n_sites: 6
+  mass: 0.5
+  coupling_g: 1.0
+  lattice_spacing: 1.0
+  theta0: 0.0
+  theta1_values: [0.0, 1.2, 2.4]
+
+evolution:
+  t_max: 3.0
+  n_steps: 41
+  method: dense
+  dense_max_sites: 9
+
+magic:
+  enabled: true
+  alphas: [2.0]
+  max_sites_exact: 10
+  z_batch_size: 64
+
+nnqs:
+  enabled: true
+  snapshot_count: 5
+  measurement_samples: 3000
+  val_fraction: 0.2
+  hidden_size: 32
+  epochs: 25
+  lr: 0.001
+  batch_size: 128
+  threshold_nll: 2.8
+  seed: 3
+
+output:
+  out_dir: outputs_smoke
+  fig_dir: outputs_smoke/figs

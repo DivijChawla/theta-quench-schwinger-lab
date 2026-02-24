@@ -1,0 +1,45 @@
+{
+  "has_validation": true,
+  "has_quench_summary": true,
+  "has_nnqs_metrics": true,
+  "validation": {
+    "hermitian_h0": true,
+    "hermitian_h1": true,
+    "norm_drift": 3.1086244689504383e-15,
+    "dense_krylov_error": 9.666656459985907e-15,
+    "magic_|0...0>": 0.0,
+    "magic_GHZ": 8.881784197001252e-16,
+    "magic_|T>^\u2297n": 1.4384103622589088
+  },
+  "quench": {
+    "n_quenches": 6,
+    "theta1_min": 0.0,
+    "theta1_max": 2.4,
+    "max_lambda_min": -0.0,
+    "max_lambda_max": 0.009883097259094,
+    "max_magic_m2_min": 1.0084901620272522,
+    "max_magic_m2_max": 1.127049914013175,
+    "corr_theta1_vs_max_lambda": 0.9568847216002637,
+    "corr_theta1_vs_max_magic_m2": 0.9678225234154314
+  },
+  "nnqs": {
+    "n_snapshots": 8,
+    "pearson_magic_vs_val_nll": 0.8202190240875006,
+    "pearson_p_magic_vs_val_nll": 0.012638533266951324,
+    "spearman_magic_vs_val_nll": 0.7619047619047621,
+    "spearman_p_magic_vs_val_nll": 0.028004939153071805,
+    "pearson_magic_vs_kl": 0.008929836663151697,
+    "pearson_p_magic_vs_kl": 0.9832574463388994,
+    "magic_min": 0.8225537753672985,
+    "magic_max": 1.1010371437912188
+  },
+  "copied_figures": [
+    "fig1_loschmidt_family.png",
+    "fig2_magic_lambda_overlay.png",
+    "fig3_heatmaps_lambda_magic.png",
+    "fig4_nnqs_loss_vs_magic.png",
+    "fig4b_nnqs_val_curves.png",
+    "fig5_entropy_vs_magic.png",
+    "quench_dynamics.gif"
+  ]
+}

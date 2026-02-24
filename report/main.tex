@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{physics}
+\usepackage{float}
+
+\title{Theta-Quench Schwinger Lab:\\Dynamical Transitions, Stabilizer-Renyi Magic, and NNQS Learnability}
+\author{Computational Study Pipeline}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We implement an end-to-end computational framework for sudden $\theta$-quenches in the $(1+1)$D lattice Schwinger model with staggered fermions and open boundaries, mapped to qubits after Gauss-law elimination. For small chains ($N\lesssim 12$), we compute exact ground states, unitary post-quench dynamics, Loschmidt diagnostics, connected correlators, bipartite entanglement, and stabilizer-Renyi magic $M_\alpha$. We then fit time snapshots with an autoregressive neural quantum state (NNQS) and quantify learnability by final KL error and convergence speed. The delivered repository reproduces the full figure set with one command.
+\end{abstract}
+
+\section{Model and Hamiltonian decomposition}
+We work with staggered matter on $N$ sites and open boundaries. The spin Hamiltonian is decomposed as
+\begin{equation}
+H(\theta)=H_{\pm}+H_{ZZ}+H_Z+H_\mathrm{const},
+\end{equation}
+with
+\begin{align}
+H_{\pm} &= \frac{1}{2a}\sum_{n=0}^{N-2}\left(\sigma_n^+\sigma_{n+1}^-+\sigma_n^-\sigma_{n+1}^+\right)
+=\frac{1}{4a}\sum_{n=0}^{N-2}(X_nX_{n+1}+Y_nY_{n+1}),\\
+H_Z &= \frac{m}{2}\sum_{n=0}^{N-1}(-1)^n Z_n + \text{(linear terms from electric energy)}.
+\end{align}
+Using Gauss' law with background field $\alpha=\theta/(2\pi)$,
+\begin{equation}
+L_n = \alpha + \sum_{k=0}^n q_k,\qquad q_k = \frac{Z_k+(-1)^k}{2},
+\end{equation}
+and electric energy coefficient $\frac{g^2a}{2}$, we obtain nonlocal $ZZ$ couplings and additional $Z$ shifts. The implementation computes explicit pair and linear coefficients induced by the open-boundary kernel $w_{ij}=N-1-\max(i,j)$.
+
+\section{Quench protocol and exact dynamics}
+Given $(m,g,a)$, initial angle $\theta_0$, and final angle $\theta_1$, we:
+\begin{enumerate}
+    \item Build $H(\theta_0)$ and compute its ground state $\ket{\psi_0}$ via exact diagonalization.
+    \item Evolve under $H(\theta_1)$:
+    \begin{equation}
+    \ket{\psi(t)}=e^{-iH(\theta_1)t}\ket{\psi_0},
+    \end{equation}
+    using dense eigensystem propagation for tiny Hilbert spaces and Krylov \texttt{expm\_multiply} otherwise.
+\end{enumerate}
+
+\section{Measured observables and diagnostics}
+For each time point we compute:
+\begin{align}
+\epsilon(t)&=\frac{1}{N}\bra{\psi(t)}H(\theta_1)\ket{\psi(t)},\\
+M(t)&=\frac{1}{N}\sum_n(-1)^n\expval{Z_n}_t,\\
+C_{ij}(t)&=\expval{Z_iZ_j}_t-\expval{Z_i}_t\expval{Z_j}_t,\\
+\lambda(t)&=-\frac{1}{N}\log\left|\braket{\psi_0|\psi(t)}\right|^2,
+\end{align}
+plus bipartite von Neumann entropy $S_A(t)$ at the half-chain cut.
+
+\section{Stabilizer-Renyi magic}
+For each Pauli string $P\in\{I,X,Y,Z\}^{\otimes n}$ and pure state $\ket{\psi}$,
+\begin{equation}
+c_P=\expval{P},\qquad \Xi_P=\frac{1}{d}c_P^2,\qquad d=2^n.
+\end{equation}
+We evaluate
+\begin{equation}
+M_\alpha(\psi)=\frac{1}{1-\alpha}\log\sum_P\Xi_P^\alpha-\log d,
+\end{equation}
+with emphasis on $\alpha=2$. The code streams through Pauli strings in symplectic $(x,z)$ representation and batches parity evaluations.
+
+\section{NNQS learnability experiment}
+Snapshots $\{\ket{\psi(t_k)}\}$ are sampled in the computational basis from $p(z)=|\psi_z|^2$. We train an autoregressive GRU model to learn $p_\theta(z)$ by minimizing NLL. Metrics:
+\begin{itemize}
+    \item validation NLL,
+    \item exact KL$\left(p\Vert p_\theta\right)$ on all $2^N$ bitstrings,
+    \item total variation distance,
+    \item epochs to threshold NLL.
+\end{itemize}
+We then regress final KL versus snapshot $M_2$ to quantify ``higher magic $\Rightarrow$ worse learnability.''
+In the generated figure set, the primary scatter uses final validation NLL versus $M_2$, while exact KL and TV are retained in the accompanying CSV.
+
+\section{Validation checks}
+The pipeline enforces and stores:
+\begin{itemize}
+    \item Hermiticity of $H(\theta_0)$ and $H(\theta_1)$,
+    \item norm conservation drift $\max_t\left|\lVert\psi(t)\rVert^2-1\right|$,
+    \item dense-vs-Krylov trajectory mismatch for small-$N$,
+    \item magic sanity states: $\ket{0}^{\otimes n}$ and GHZ (low magic), $\ket{T}^{\otimes n}$ (higher magic).
+\end{itemize}
+
+\section{Figure set and interpretation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figs/fig1_loschmidt_family.png}
+    \caption{Loschmidt rate function $\lambda(t)$ for multiple quench endpoints $\theta_1$. Nonanalytic-like sharp features emerge under stronger quenches.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figs/fig2_magic_lambda_overlay.png}
+    \caption{Overlay of $\lambda(t)$ and $M_2(t)$ for a strong quench. Peaks in transition diagnostics co-occur with rapid magic growth windows.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figs/fig3_heatmaps_lambda_magic.png}
+    \caption{Heatmaps over $(t,\theta_1)$ for Loschmidt rate and magic. Quench-strength dependence appears in both landscapes.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figs/fig4_nnqs_loss_vs_magic.png}
+    \caption{NNQS final validation loss versus snapshot magic $M_2$. The fitted slope quantifies the learnability penalty from non-stabilizerness; exact KL and TV are also reported in CSV outputs.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figs/fig5_entropy_vs_magic.png}
+    \caption{Optional entropy-versus-magic trajectory colored by time, showing relation and mismatch between entanglement and stabilizer complexity.}
+\end{figure}
+
+\section{Limitations and next steps}
+Current exact routines are restricted by Hilbert-space growth and Pauli enumeration cost. Practical next steps:
+\begin{enumerate}
+    \item Use symmetry sectors and sparse block structure for larger $N$.
+    \item Replace exact magic with Monte Carlo Pauli estimators at $N\gtrsim 12$.
+    \item Extend NNQS architecture (Transformer/MADE) and include amplitude+phase learning from rotated measurement bases.
+    \item Add Trotterized digital-circuit compilation for direct quantum hardware execution.
+\end{enumerate}
+
+\section{Reproducibility}
+From repository root:
+\begin{verbatim}
+python -m tqm.run --config configs/default.yaml --all
+\end{verbatim}
+This generates data in \texttt{outputs/} and figures in \texttt{outputs/figs/}. Copy figures to \texttt{report/figs/} and compile this document.
+The default run includes NNQS and requires PyTorch. A torch-free fallback is available via \texttt{configs/no\_nnqs.yaml}.
+
+\end{document}

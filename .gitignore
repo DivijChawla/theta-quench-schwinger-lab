@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+
+# Local env/config
+.venv/
+.mplconfig/
+.DS_Store
+
+# Generated runtime outputs (rebuildable)
+outputs/
+outputs_smoke/
+report/figs/
+
+# Build/dist
+build/
+dist/
+*.egg-info/

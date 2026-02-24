@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "theta-quench-magic"
+version = "0.1.0"
+description = "Theta-quenches in the lattice Schwinger model with magic and NNQS analysis"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Theta-Quench Schwinger Lab" }
+]
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.10",
+  "matplotlib>=3.7",
+  "pandas>=2.0",
+  "pyyaml>=6.0",
+  "tqdm>=4.66",
+  "torch>=2.1",
+]
+
+[project.scripts]
+tqm = "tqm.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tqm*"]
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"

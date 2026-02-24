@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Theta-Quench Schwinger Lab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <h1>Theta-Quench Schwinger Lab</h1>
+      <p class="subtitle">
+        Exact small-system dynamics in the lattice Schwinger model with
+        dynamical transition diagnostics, stabilizer Rényi magic, and NNQS learnability analysis.
+      </p>
+      <div class="badges">
+        <span class="badge">Gauge Theory (1+1D QED)</span>
+        <span class="badge">Exact Diagonalization</span>
+        <span class="badge">Loschmidt Diagnostics</span>
+        <span class="badge">Stabilizer Magic M2</span>
+        <span class="badge">NNQS Learnability</span>
+      </div>
+    </header>
+
+    <section class="grid section">
+      <article class="card">
+        <h2>Problem</h2>
+        <p>
+          Start from the ground state at <code>theta0</code>, quench to <code>theta1</code>, evolve in real time,
+          and ask: how do transition-like dynamics, quantum magic, and neural learnability co-vary?
+        </p>
+      </article>
+      <article class="card">
+        <h2>Model</h2>
+        <p>
+          Open-boundary staggered-fermion Schwinger Hamiltonian after Gauss-law elimination:
+          <code>H = H_pm + H_ZZ + H_Z + const</code>, with nonlocal Coulomb-like <code>ZZ</code> couplings.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Core Outputs</h2>
+        <p>
+          <code>lambda(t)</code> (Loschmidt rate), <code>M2(t)</code>, entanglement entropy,
+          quench heatmaps, and NNQS fit metrics (NLL, KL, TV, steps-to-threshold).
+        </p>
+      </article>
+    </section>
+
+    <section class="grid section">
+      <article class="card">
+        <h2>Verification Summary</h2>
+        <dl class="kv" id="validation-kv">
+          <dt>Status</dt><dd>Loading…</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h2>Quench Trend Summary</h2>
+        <dl class="kv" id="quench-kv">
+          <dt>Status</dt><dd>Loading…</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h2>NNQS Trend Summary</h2>
+        <dl class="kv" id="nnqs-kv">
+          <dt>Status</dt><dd>Loading…</dd>
+        </dl>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="warn">
+        This is a small-N exact study. Strong claims are limited to this regime.
+        The robust finding is magic vs optimization difficulty (validation NLL),
+        not a universal KL-law in all settings.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Figures</h2>
+      <div class="figure-grid">
+        <figure class="figure">
+          <img src="figs/quench_dynamics.gif" alt="Quench dynamics animation" />
+          <figcaption>Animation: growth of <code>lambda(t)</code> and <code>M2(t)</code> across quench strengths.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig1_loschmidt_family.png" alt="Loschmidt family" />
+          <figcaption>Fig 1: Loschmidt rate family.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig2_magic_lambda_overlay.png" alt="Magic overlay" />
+          <figcaption>Fig 2: <code>M2(t)</code> overlaid with transition diagnostic.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig3_heatmaps_lambda_magic.png" alt="Heatmaps" />
+          <figcaption>Fig 3: Heatmaps over time and quench endpoint.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig4_nnqs_loss_vs_magic.png" alt="NNQS loss vs magic" />
+          <figcaption>Fig 4: Higher magic associates with worse NNQS validation loss.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig4b_nnqs_val_curves.png" alt="NNQS validation curves" />
+          <figcaption>Fig 4b: NNQS convergence curves by snapshot.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig5_entropy_vs_magic.png" alt="Entropy vs magic" />
+          <figcaption>Fig 5: Entanglement vs magic trajectory.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="grid section">
+      <article class="card">
+        <h2>Reproduce</h2>
+        <pre><code>python3 -m tqm.run --config configs/default.yaml --all
+python3 experiments/build_showcase.py --outputs outputs --docs docs</code></pre>
+      </article>
+      <article class="card">
+        <h2>Manual Audit</h2>
+        <pre><code>python3 experiments/manual_verification.py --config configs/default.yaml
+python3 experiments/nnqs_seed_sweep.py --config configs/default.yaml --seeds 11,17,23,29,31</code></pre>
+      </article>
+    </section>
+
+    <p class="footer">
+      Reviewer note: this page is built from committed outputs; metrics are loaded from <code>docs/data/metrics.json</code>.
+    </p>
+  </main>
+
+  <script>
+    function addKV(targetId, entries) {
+      const root = document.getElementById(targetId);
+      root.innerHTML = "";
+      for (const [k, v] of entries) {
+        const dt = document.createElement("dt");
+        const dd = document.createElement("dd");
+        dt.textContent = k;
+        dd.textContent = v;
+        root.appendChild(dt);
+        root.appendChild(dd);
+      }
+    }
+
+    function fmt(x) {
+      if (x === null || x === undefined) return "n/a";
+      if (typeof x !== "number") return String(x);
+      if (!Number.isFinite(x)) return "n/a";
+      if (Math.abs(x) >= 1e3 || (Math.abs(x) > 0 && Math.abs(x) < 1e-3)) return x.toExponential(3);
+      return x.toFixed(4);
+    }
+
+    fetch("data/metrics.json")
+      .then(r => r.json())
+      .then(m => {
+        const v = m.validation || {};
+        addKV("validation-kv", [
+          ["Hermitian H0/H1", `${v.hermitian_h0} / ${v.hermitian_h1}`],
+          ["Norm drift", fmt(v.norm_drift)],
+          ["Dense vs Krylov", fmt(v.dense_krylov_error)],
+          ["Magic sanity |T>^n", fmt(v["magic_|T>^⊗n"])],
+        ]);
+
+        const q = m.quench || {};
+        addKV("quench-kv", [
+          ["# quenches", fmt(q.n_quenches)],
+          ["theta1 range", `${fmt(q.theta1_min)} → ${fmt(q.theta1_max)}`],
+          ["corr(theta1, max lambda)", fmt(q.corr_theta1_vs_max_lambda)],
+          ["corr(theta1, max M2)", fmt(q.corr_theta1_vs_max_magic_m2)],
+        ]);
+
+        const n = m.nnqs || {};
+        addKV("nnqs-kv", [
+          ["# snapshots", fmt(n.n_snapshots)],
+          ["Pearson(magic, val NLL)", `${fmt(n.pearson_magic_vs_val_nll)} (p=${fmt(n.pearson_p_magic_vs_val_nll)})`],
+          ["Spearman(magic, val NLL)", `${fmt(n.spearman_magic_vs_val_nll)} (p=${fmt(n.spearman_p_magic_vs_val_nll)})`],
+          ["Pearson(magic, KL)", `${fmt(n.pearson_magic_vs_kl)} (p=${fmt(n.pearson_p_magic_vs_kl)})`],
+        ]);
+      })
+      .catch(() => {
+        addKV("validation-kv", [["Status", "metrics.json missing"]]);
+        addKV("quench-kv", [["Status", "metrics.json missing"]]);
+        addKV("nnqs-kv", [["Status", "metrics.json missing"]]);
+      });
+  </script>
+</body>
+</html>

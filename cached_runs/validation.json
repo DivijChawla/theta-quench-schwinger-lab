@@ -1,0 +1,9 @@
+{
+  "hermitian_h0": true,
+  "hermitian_h1": true,
+  "norm_drift": 3.1086244689504383e-15,
+  "dense_krylov_error": 9.666656459985907e-15,
+  "magic_|0...0>": 0.0,
+  "magic_GHZ": 8.881784197001252e-16,
+  "magic_|T>^\u2297n": 1.4384103622589088
+}
