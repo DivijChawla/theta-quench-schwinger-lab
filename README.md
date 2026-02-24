@@ -1,4 +1,5 @@
 # Theta-Quench Schwinger Lab
+![CI](https://github.com/DivijChawla/theta-quench-schwinger-lab/actions/workflows/ci.yml/badge.svg)
 
 A mini research toolkit for **real-time dynamics in a lattice gauge model**.
 This project tests the hypothesis that stronger Schwinger-model \(\theta\)-quenches increase both transition diagnostics and stabilizer magic, and that **higher-magic snapshots are harder for NNQS training**.
