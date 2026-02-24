@@ -23,28 +23,21 @@
       </div>
     </header>
 
-    <section class="grid section">
-      <article class="card">
-        <h2>Problem</h2>
-        <p>
-          Start from the ground state at <code>theta0</code>, quench to <code>theta1</code>, evolve in real time,
-          and ask: how do transition-like dynamics, quantum magic, and neural learnability co-vary?
-        </p>
-      </article>
-      <article class="card">
-        <h2>Model</h2>
-        <p>
-          Open-boundary staggered-fermion Schwinger Hamiltonian after Gauss-law elimination:
-          <code>H = H_pm + H_ZZ + H_Z + const</code>, with nonlocal Coulomb-like <code>ZZ</code> couplings.
-        </p>
-      </article>
-      <article class="card">
-        <h2>Core Outputs</h2>
-        <p>
-          <code>lambda(t)</code> (Loschmidt rate), <code>M2(t)</code>, entanglement entropy,
-          quench heatmaps, and NNQS fit metrics (NLL, KL, TV, steps-to-threshold).
-        </p>
-      </article>
+    <section class="section feature-grid">
+      <figure class="figure feature-main">
+        <img src="figs/fig2_magic_lambda_overlay.png" alt="Magic and Loschmidt overlay" />
+        <figcaption>Primary hook: transition diagnostic and stabilizer magic co-evolution.</figcaption>
+      </figure>
+      <div class="feature-side">
+        <figure class="figure">
+          <img src="figs/fig4_nnqs_loss_vs_magic.png" alt="NNQS loss vs magic" />
+          <figcaption>Learnability hook: higher magic aligns with worse validation loss.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/quench_dynamics.gif" alt="Quench dynamics animation" />
+          <figcaption>Animation: buildup of <code>lambda(t)</code> and <code>M2(t)</code>.</figcaption>
+        </figure>
+      </div>
     </section>
 
     <section class="grid section">
@@ -77,12 +70,8 @@
     </section>
 
     <section class="section">
-      <h2>Figures</h2>
+      <h2>Full Figure Set</h2>
       <div class="figure-grid">
-        <figure class="figure">
-          <img src="figs/quench_dynamics.gif" alt="Quench dynamics animation" />
-          <figcaption>Animation: growth of <code>lambda(t)</code> and <code>M2(t)</code> across quench strengths.</figcaption>
-        </figure>
         <figure class="figure">
           <img src="figs/fig1_loschmidt_family.png" alt="Loschmidt family" />
           <figcaption>Fig 1: Loschmidt rate family.</figcaption>
@@ -111,6 +100,14 @@
     </section>
 
     <section class="grid section">
+      <article class="card">
+        <h2>Problem + Model</h2>
+        <p>
+          Quench protocol: prepare ground state at <code>theta0</code>, evolve under <code>theta1</code>.
+          Hamiltonian uses Gauss-law-eliminated staggered Schwinger form
+          <code>H = H_pm + H_ZZ + H_Z + const</code> with nonlocal <code>ZZ</code> couplings.
+        </p>
+      </article>
       <article class="card">
         <h2>Reproduce</h2>
         <pre><code>python3 -m tqm.run --config configs/default.yaml --all
