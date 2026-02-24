@@ -18,10 +18,6 @@ dependencies = [
   "pandas>=2.0",
   "pyyaml>=6.0",
   "tqdm>=4.66",
-]
-
-[project.optional-dependencies]
-nnqs = [
   "torch>=2.1",
 ]
 
