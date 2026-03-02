@@ -22,7 +22,7 @@ class ModelConfig:
 class EvolutionConfig:
     t_max: float = 8.0
     n_steps: int = 121
-    method: str = "krylov"  # krylov|dense
+    method: str = "krylov"  # krylov|dense|sector_krylov
     dense_max_sites: int = 9
 
 

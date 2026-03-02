@@ -13,6 +13,9 @@ __pycache__/
 outputs/
 outputs_smoke/
 report/figs/
+docs_ci/
+artifacts/
+report/short_report_ci.pdf
 
 # Build/dist
 build/

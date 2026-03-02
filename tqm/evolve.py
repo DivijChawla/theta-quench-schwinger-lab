@@ -5,6 +5,55 @@ import scipy.sparse as sp
 import scipy.sparse.linalg as spla
 
 
+def _n_sites_from_dim(dim: int) -> int:
+    n = int(round(np.log2(dim)))
+    if 2**n != dim:
+        raise ValueError(f"State dimension {dim} is not a power of 2")
+    return n
+
+
+def _popcount_indices(n_sites: int) -> np.ndarray:
+    dim = 2**n_sites
+    idx = np.arange(dim, dtype=np.uint64)
+    bytes_view = idx.view(np.uint8).reshape(dim, -1)
+    return np.unpackbits(bytes_view, axis=1).sum(axis=1).astype(np.int64)
+
+
+def _detect_number_sector(psi0: np.ndarray, n_sites: int, tol: float = 1e-12) -> int | None:
+    weights = _popcount_indices(n_sites)
+    probs = np.abs(psi0) ** 2
+    support = probs > tol
+    if not np.any(support):
+        return None
+    sectors = np.unique(weights[support])
+    if len(sectors) != 1:
+        return None
+    return int(sectors[0])
+
+
+def evolve_krylov_sector(
+    hamiltonian: sp.csr_matrix,
+    psi0: np.ndarray,
+    times: np.ndarray,
+    sector: int | None = None,
+) -> np.ndarray:
+    """Krylov evolution restricted to fixed Hamming-weight sector when available."""
+    n_sites = _n_sites_from_dim(psi0.size)
+    chosen_sector = sector if sector is not None else _detect_number_sector(psi0, n_sites=n_sites)
+    if chosen_sector is None:
+        return evolve_krylov(hamiltonian, psi0, times)
+
+    weights = _popcount_indices(n_sites)
+    sel = np.flatnonzero(weights == int(chosen_sector))
+    h_sector = hamiltonian[sel][:, sel].tocsr()
+    psi_sector0 = psi0[sel]
+    sector_states = evolve_krylov(h_sector, psi_sector0, times)
+
+    out = np.zeros((len(times), psi0.size), dtype=np.complex128)
+    out[:, sel] = sector_states
+    return out
+
+
 def _check_times(times: np.ndarray) -> np.ndarray:
     t = np.asarray(times, dtype=float)
     if t.ndim != 1 or t.size == 0:
@@ -99,6 +148,8 @@ def evolve_state(
         return evolve_krylov(hamiltonian, psi0, times)
     if method == "dense":
         return evolve_dense(hamiltonian, psi0, times)
+    if method == "sector_krylov":
+        return evolve_krylov_sector(hamiltonian, psi0, times)
     raise ValueError(f"Unknown evolution method: {method}")
 
 

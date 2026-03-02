@@ -1,0 +1,91 @@
+study_id: stage1_prxq
+primary_endpoint: pearson_magic_vs_val_nll_partial_entropy
+power_target: "Detect r in [0.25,0.35] with >=10 seeds per headline condition"
+models: [gru, rbm, independent, made]
+size_grid: [6, 8, 10, 12]
+regime_grid:
+  - { name: baseline, mass: 0.5, coupling_g: 1.0 }
+  - { name: alt_baseline, mass: 0.2, coupling_g: 1.3 }
+  - { name: alt_heavy_mass, mass: 0.9, coupling_g: 0.8 }
+  - { name: alt_strong_coupling, mass: 0.1, coupling_g: 1.6 }
+
+phases:
+  stage1:
+    runs:
+      - name: baseline_n6n8_multiarch
+        config: configs/novelty.yaml
+        out_dir: outputs/stage1_prxq/baseline_n6n8_multiarch
+        n_sites: [6, 8]
+        theta1: [0.0, 0.8, 1.2, 1.6, 2.0, 2.4]
+        architectures: [gru, rbm, independent, made]
+        seeds: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
+        hidden_sizes: [48]
+        bootstrap: 250
+        permutations: 400
+        epochs: 50
+        measurement_samples: 5000
+        snapshot_count: 6
+        checkpoint_every: 8
+
+      - name: n10_power_exact
+        config: configs/n10_exact.yaml
+        out_dir: outputs/stage1_prxq/n10_power_exact
+        n_sites: [10]
+        theta1: [0.0, 1.2, 2.4]
+        architectures: [gru, rbm, independent, made]
+        seeds: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
+        hidden_sizes: [32]
+        bootstrap: 250
+        permutations: 400
+        epochs: 50
+        measurement_samples: 5000
+        snapshot_count: 8
+        checkpoint_every: 4
+
+      - name: alt_regime_baseline
+        config: configs/alt_regime.yaml
+        out_dir: outputs/stage1_prxq/alt_regime_baseline
+        n_sites: [6]
+        theta1: [0.0, 0.9, 1.8, 2.7]
+        architectures: [gru, rbm, independent, made]
+        seeds: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
+        hidden_sizes: [48]
+        bootstrap: 250
+        permutations: 400
+        epochs: 45
+        measurement_samples: 4500
+        snapshot_count: 5
+        checkpoint_every: 6
+
+      - name: alt_regime_heavy_mass
+        config: configs/alt_regime_heavy_mass.yaml
+        out_dir: outputs/stage1_prxq/alt_regime_heavy_mass
+        n_sites: [6]
+        theta1: [0.0, 0.9, 1.8, 2.7]
+        architectures: [gru, rbm, independent, made]
+        seeds: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
+        hidden_sizes: [48]
+        bootstrap: 250
+        permutations: 400
+        epochs: 45
+        measurement_samples: 4500
+        snapshot_count: 5
+        checkpoint_every: 6
+
+      - name: alt_regime_strong_coupling
+        config: configs/alt_regime_strong_coupling.yaml
+        out_dir: outputs/stage1_prxq/alt_regime_strong_coupling
+        n_sites: [6]
+        theta1: [0.0, 0.9, 1.8, 2.7]
+        architectures: [gru, rbm, independent, made]
+        seeds: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
+        hidden_sizes: [48]
+        bootstrap: 250
+        permutations: 400
+        epochs: 45
+        measurement_samples: 4500
+        snapshot_count: 5
+        checkpoint_every: 6
+    aggregate:
+      publishability_out: report/publishability_status.md
+      regime_sensitivity_out: report/regime_sensitivity.md

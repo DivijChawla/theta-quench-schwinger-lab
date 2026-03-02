@@ -1,0 +1,16 @@
+study_id: stage3_prx
+primary_endpoint: beta_magic_entropy_controlled
+power_target: "Adversarial null-disproof with permutation-FDR and positive beta CI lower bounds across model families"
+models: [gru, made, independent]
+size_grid: [6, 8, 10]
+regime_grid:
+  - { name: schwinger_stage2_base, source: outputs/stage2_prlx/universal_scan_v2 }
+  - { name: tfim_stage2_base, source: outputs/stage2_prlx/universal_scan_v2 }
+  - { name: xxz_extension, source: configs/stage3_universal.yaml }
+
+phases:
+  stage3:
+    runs:
+      - name: stage3_universal_extension
+        config: configs/stage3_universal_v3.yaml
+        out_dir: outputs/stage3_prx/universal_extension_v3

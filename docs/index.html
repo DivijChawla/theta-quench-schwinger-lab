@@ -72,7 +72,7 @@
       <div class="warn">
         This is a small-N exact study. Strong claims are limited to this regime.
         The robust finding is magic vs optimization difficulty (validation NLL),
-        not a universal KL-law in all settings.
+        with explicit boundary mapping: Stage 2 sign-law is architecture-dependent, Stage 3/4 support a stronger corridor-level beta-law mechanism, and Stage 5 identifies regime-level failure zones (notably Schwinger alt-baseline).
       </div>
     </section>
 
@@ -106,6 +106,110 @@
         <figure class="figure">
           <img src="figs/fig5_entropy_vs_magic.png" alt="Entropy vs magic" />
           <figcaption>Fig 5: Entanglement vs magic trajectory.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig6_regime_boundary_magic_valnll.png" alt="Regime boundary heatmap" />
+          <figcaption>Fig 6: Regime/size boundary for magic vs validation NLL (S/M/U verdict + pooled r).</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig7_positive_control_scatter.png" alt="Positive control scatter" />
+          <figcaption>Fig 7: Positive-control synthetic family validates magic-linked learnability trend.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig8_magic_calibration.png" alt="Magic calibration" />
+          <figcaption>Fig 8: Approximate magic calibration error envelope versus exact M2.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Stage 2 Cross-Model Bounds</h2>
+      <div class="figure-grid">
+        <figure class="figure">
+          <img src="figs/fig_stage2_crossmodel_pooled_r.png" alt="Stage 2 pooled primary effects" />
+          <figcaption>Stage 2: pooled partial-correlation endpoint (<code>magic -> val NLL | entropy</code>) across Schwinger and TFIM.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage2_beta_bounds.png" alt="Stage 2 beta bounds" />
+          <figcaption>Stage 2: bootstrap CIs for entropy-controlled slope <code>beta_magic</code> (all lower bounds positive).</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage2_mechanism_arch_slope.png" alt="Stage 2 mechanism architecture slopes" />
+          <figcaption>Stage 2 mechanism regression: cluster-robust <code>beta_magic</code> by architecture.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage2_finite_size.png" alt="Stage 2 finite-size trend" />
+          <figcaption>Stage 2: finite-size trend vs <code>1/N</code> in the dynamical corridor.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage2_pinsker_bound.png" alt="Pinsker bound check" />
+          <figcaption>Stage 2: KL and TV satisfy the Pinsker lower bound check across snapshots.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage2_corridor_robustness_all_arch.png" alt="All-arch robustness" />
+          <figcaption>Stage 2 robustness (all architectures): beta-law is stable across thresholds, while sign-law fails.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage2_corridor_robustness_expressive.png" alt="Expressive robustness" />
+          <figcaption>Stage 2 robustness (GRU/MADE): expressive-model sign-law passes across tested thresholds.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Stage 3 Null-Disproof Stress Test</h2>
+      <div class="figure-grid">
+        <figure class="figure">
+          <img src="figs/fig_stage3_beta_forest.png" alt="Stage 3 beta forest" />
+          <figcaption>Stage 3: entropy-controlled <code>beta_magic</code> CIs across Schwinger, TFIM, and XXZ cells.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage3_perm_qvalues.png" alt="Stage 3 permutation q-values" />
+          <figcaption>Stage 3: BH-FDR q-values from condition-wise permutation null tests.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage3_partial_sign_heatmap.png" alt="Stage 3 partial sign heatmap" />
+          <figcaption>Stage 3: partial-correlation lower-CI heatmap showing sign heterogeneity boundaries.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Stage 4 Thermodynamic + Theory Stress</h2>
+      <div class="figure-grid">
+        <figure class="figure">
+          <img src="figs/fig_stage4_beta_by_size.png" alt="Stage 4 beta by size" />
+          <figcaption>Stage 4: entropy-controlled <code>beta_magic</code> across sizes for each model/architecture cell.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage4_beta_inf_forest.png" alt="Stage 4 beta infinity extrapolation" />
+          <figcaption>Stage 4: weighted extrapolation of <code>beta_magic</code> to <code>N→∞</code>.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage4_quantile_bound.png" alt="Stage 4 quantile bound" />
+          <figcaption>Stage 4: quantile-regression lower-envelope bound check for magic coefficient.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Stage 5 External Family + Regime Expansion</h2>
+      <div class="figure-grid">
+        <figure class="figure">
+          <img src="figs/fig_stage5_beta_forest.png" alt="Stage 5 beta forest" />
+          <figcaption>Stage 5: cell-level beta-law bounds after adding ANNNI as a fourth model family.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage5_regime_minimax.png" alt="Stage 5 minimax regime bound" />
+          <figcaption>Stage 5: minimax lower-bound across regimes highlights where universal regime-level claims fail.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage5_regime_heatmap.png" alt="Stage 5 regime heatmap" />
+          <figcaption>Stage 5: regime boundary map (<code>beta_magic</code> CI low), making failure zones explicit.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/fig_stage5_quantile_bound.png" alt="Stage 5 quantile bound" />
+          <figcaption>Stage 5: quantile-regression lower-envelope remains positive in the corridor despite regime heterogeneity.</figcaption>
         </figure>
       </div>
     </section>

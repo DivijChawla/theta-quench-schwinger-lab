@@ -1,0 +1,19 @@
+n_sites: [6, 8, 10]
+h0: 0.2
+h1_values: [0.6, 1.0, 1.4]
+j: 1.0
+hz: 0.0
+t_max: 2.0
+n_steps: 11
+architectures: [gru, made, independent]
+seeds: [11, 17, 23, 29]
+hidden_size: 48
+epochs: 35
+measurement_samples: 3200
+snapshot_count: 6
+val_fraction: 0.2
+lr: 0.001
+batch_size: 256
+threshold_nll: 4.0
+bootstrap: 300
+lambda_quantile: 0.4

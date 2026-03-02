@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from ..config import NNQSConfig
 from .data import all_bitstrings, sample_bitstrings_from_state, state_probabilities, total_variation_distance, train_val_split
-from .model import AutoregressiveGRU
+from .model import AutoregressiveGRU, AutoregressiveMADE
 
 
 @dataclass
@@ -27,12 +27,22 @@ def _to_tensor(x: np.ndarray, device: torch.device) -> torch.Tensor:
     return torch.tensor(x, dtype=torch.float32, device=device)
 
 
+def _build_model(model_type: str, n_sites: int, hidden_size: int) -> torch.nn.Module:
+    m = model_type.lower()
+    if m == "gru":
+        return AutoregressiveGRU(n_sites=n_sites, hidden_size=hidden_size)
+    if m == "made":
+        return AutoregressiveMADE(n_sites=n_sites, hidden_size=hidden_size)
+    raise ValueError(f"Unsupported model_type: {model_type}")
+
+
 def train_nnqs_on_state(
     psi: np.ndarray,
     n_sites: int,
     cfg: NNQSConfig,
     seed: int | None = None,
     device: str = "cpu",
+    model_type: str = "gru",
 ) -> NNQSTrainResult:
     if seed is None:
         seed = cfg.seed
@@ -54,7 +64,7 @@ def train_nnqs_on_state(
 
     train_loader = DataLoader(TensorDataset(train_t), batch_size=cfg.batch_size, shuffle=True)
 
-    model = AutoregressiveGRU(n_sites=n_sites, hidden_size=cfg.hidden_size).to(dev)
+    model = _build_model(model_type=model_type, n_sites=n_sites, hidden_size=cfg.hidden_size).to(dev)
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr)
 
     hist_train: list[float] = []
@@ -113,6 +123,7 @@ def run_snapshot_study(
     magic_m2: np.ndarray,
     cfg: NNQSConfig,
     device: str = "cpu",
+    model_type: str = "gru",
 ) -> tuple[pd.DataFrame, dict[int, dict[str, list[float]]]]:
     n_times = states.shape[0]
     snapshot_idx = np.unique(np.linspace(0, n_times - 1, cfg.snapshot_count, dtype=int))
@@ -127,6 +138,7 @@ def run_snapshot_study(
             cfg=cfg,
             seed=cfg.seed + rank,
             device=device,
+            model_type=model_type,
         )
         rows.append(
             {

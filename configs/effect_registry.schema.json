@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EffectRegistry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "study_id",
+    "phase",
+    "generated_at_utc",
+    "primary_endpoint",
+    "power_target",
+    "runs",
+    "effects",
+    "gate_flags"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "study_id": { "type": "string" },
+    "phase": { "type": "string", "enum": ["stage1", "stage2"] },
+    "generated_at_utc": { "type": "string" },
+    "primary_endpoint": { "type": "string" },
+    "power_target": { "type": "string" },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "summary_path"],
+        "properties": {
+          "label": { "type": "string" },
+          "summary_path": { "type": "string" }
+        }
+      }
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["run_label", "architecture", "metric", "verdict"],
+        "properties": {
+          "run_label": { "type": "string" },
+          "architecture": { "type": "string" },
+          "metric": { "type": "string" },
+          "pooled_r": { "type": ["number", "null"] },
+          "ci_low": { "type": ["number", "null"] },
+          "ci_high": { "type": ["number", "null"] },
+          "i2": { "type": ["number", "null"] },
+          "combined_p": { "type": ["number", "null"] },
+          "combined_q": { "type": ["number", "null"] },
+          "verdict": { "type": "string" },
+          "n_studies": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "gate_flags": {
+      "type": "object",
+      "required": [
+        "primary_supported_majority",
+        "entropy_control_supported_any",
+        "has_secondary_metrics"
+      ],
+      "properties": {
+        "primary_supported_majority": { "type": "boolean" },
+        "entropy_control_supported_any": { "type": "boolean" },
+        "has_secondary_metrics": { "type": "boolean" }
+      }
+    }
+  }
+}

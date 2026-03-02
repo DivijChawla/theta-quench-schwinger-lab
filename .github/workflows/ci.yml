@@ -30,11 +30,17 @@ jobs:
       - name: Unit tests
         run: pytest -q
 
+      - name: Study registry dry-run
+        run: python -m tqm.run --study stage1_prxq --phase stage1 --dry-run
+
       - name: Run no-NNQS pipeline
         run: python -m tqm.run --config configs/no_nnqs.yaml --all
 
       - name: Independent audit
         run: make audit
+
+      - name: Claim gate
+        run: python experiments/claim_gate.py --publishability report/publishability_status.md --targets README.md,report/main.tex
 
       - name: Validate expected outputs
         run: |

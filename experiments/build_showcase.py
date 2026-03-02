@@ -17,7 +17,53 @@ FIG_NAMES = [
     "fig4_nnqs_loss_vs_magic.png",
     "fig4b_nnqs_val_curves.png",
     "fig5_entropy_vs_magic.png",
+    "fig6_regime_boundary_magic_valnll.png",
+    "fig7_positive_control_scatter.png",
+    "fig8_magic_calibration.png",
+    "fig_stage2_crossmodel_pooled_r.png",
+    "fig_stage2_beta_bounds.png",
+    "fig_stage2_finite_size.png",
+    "fig_stage2_pinsker_bound.png",
+    "fig_stage2_mechanism_arch_slope.png",
+    "fig_stage2_corridor_robustness_all_arch.png",
+    "fig_stage2_corridor_robustness_expressive.png",
+    "fig_stage3_beta_forest.png",
+    "fig_stage3_perm_qvalues.png",
+    "fig_stage3_partial_sign_heatmap.png",
+    "fig_stage4_beta_by_size.png",
+    "fig_stage4_beta_inf_forest.png",
+    "fig_stage4_quantile_bound.png",
+    "fig_stage5_beta_forest.png",
+    "fig_stage5_regime_minimax.png",
+    "fig_stage5_regime_heatmap.png",
+    "fig_stage5_quantile_bound.png",
+    "project_capsule.gif",
     "quench_dynamics.gif",
+]
+
+EXTRA_FIG_SOURCES = [
+    "stage2_prlx/universal_scan_v2/figs/fig_stage2_crossmodel_pooled_r.png",
+    "stage2_prlx/universal_scan_v2/figs/fig_stage2_beta_bounds.png",
+    "stage2_prlx/universal_scan_v2/figs/fig_stage2_finite_size.png",
+    "stage2_prlx/universal_scan_v2/figs/fig_stage2_pinsker_bound.png",
+    "stage2_prlx/universal_scan_v2/figs/fig_stage2_mechanism_arch_slope.png",
+    "stage2_prlx/universal_scan_v2/figs/fig_stage2_corridor_robustness_all_arch.png",
+    "stage2_prlx/universal_scan_v2/figs/fig_stage2_corridor_robustness_expressive.png",
+    "stage3_prx/universal_extension_v1/figs/fig_stage3_beta_forest.png",
+    "stage3_prx/universal_extension_v1/figs/fig_stage3_perm_qvalues.png",
+    "stage3_prx/universal_extension_v1/figs/fig_stage3_partial_sign_heatmap.png",
+    "stage3_prx/universal_extension_v4/figs/fig_stage3_beta_forest.png",
+    "stage3_prx/universal_extension_v4/figs/fig_stage3_perm_qvalues.png",
+    "stage3_prx/universal_extension_v4/figs/fig_stage3_partial_sign_heatmap.png",
+    "stage3_prx/universal_extension_v8/figs/fig_stage3_beta_forest.png",
+    "stage3_prx/universal_extension_v8/figs/fig_stage3_perm_qvalues.png",
+    "stage3_prx/universal_extension_v8/figs/fig_stage3_partial_sign_heatmap.png",
+    "stage4_prl/thermo_theory_v1/figs/fig_stage4_beta_by_size.png",
+    "stage4_prl/thermo_theory_v1/figs/fig_stage4_beta_inf_forest.png",
+    "stage4_prl/thermo_theory_v1/figs/fig_stage4_quantile_bound.png",
+    "stage4_prl/thermo_theory_v5/figs/fig_stage4_beta_by_size.png",
+    "stage4_prl/thermo_theory_v5/figs/fig_stage4_beta_inf_forest.png",
+    "stage4_prl/thermo_theory_v5/figs/fig_stage4_quantile_bound.png",
 ]
 
 
@@ -33,6 +79,14 @@ def copy_figures(outputs_figs: Path, docs_figs: Path) -> list[str]:
         if src.exists():
             shutil.copy2(src, docs_figs / name)
             copied.append(name)
+    outputs_root = outputs_figs.parent
+    for rel in EXTRA_FIG_SOURCES:
+        src = outputs_root / rel
+        if src.exists():
+            name = src.name
+            shutil.copy2(src, docs_figs / name)
+            if name not in copied:
+                copied.append(name)
     return copied
 
 

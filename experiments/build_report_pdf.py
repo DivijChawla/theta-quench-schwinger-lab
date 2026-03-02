@@ -60,6 +60,16 @@ def _add_image_page(pdf: PdfPages, title: str, image_paths: list[Path], captions
     plt.close(fig)
 
 
+def _pick_image(outputs: Path, name: str) -> Path:
+    p0 = outputs / "figs" / name
+    if p0.exists():
+        return p0
+    p1 = outputs / "stage2_prlx" / "universal_scan_v2" / "figs" / name
+    if p1.exists():
+        return p1
+    return p0
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build short PDF report for reviewers")
     parser.add_argument("--outputs", type=str, default="outputs")
@@ -75,7 +85,7 @@ def main() -> None:
     summary_lines = [
         "Hypothesis:",
         "  Stronger theta quenches increase transition signatures and stabilizer magic;",
-        "  higher-magic snapshots should be harder for NNQS training.",
+        "  higher-magic snapshots should be harder for NNQS training (scoped claim).",
         "",
         "Model:",
         "  1+1D lattice Schwinger model (open boundaries), staggered fermions,",
@@ -83,12 +93,14 @@ def main() -> None:
         "",
         "Numerics:",
         "  Small-N exact diagonalization + real-time evolution (dense/Krylov),",
-        "  Pauli-batched stabilizer Renyi magic (M2), autoregressive NNQS fitting.",
+        "  Pauli-batched stabilizer Renyi magic (M2), GRU/MADE/RBM/independent NNQS fitting.",
         "",
         f"Artifacts:",
         f"  validation: {validation}",
         f"  quench summary: {quench}",
         f"  nnqs metrics: {nnqs}",
+        "  claim gate: report/publishability_status.md",
+        "  protocol: report/analysis_protocol.md",
     ]
 
     if validation.exists():
@@ -130,6 +142,81 @@ def main() -> None:
                 "Entanglement vs magic trajectory (complementary diagnostic).",
             ],
         )
+        _add_image_page(
+            pdf,
+            "Key Results III: Claim Boundary",
+            [figs / "fig6_regime_boundary_magic_valnll.png"],
+            [
+                "Regime/size boundary map for magic vs validation NLL (conditional, non-universal).",
+            ],
+        )
+        _add_image_page(
+            pdf,
+            "Key Results IV: Controls and Calibration",
+            [figs / "fig7_positive_control_scatter.png", figs / "fig8_magic_calibration.png"],
+            [
+                "Positive control: synthetic state family confirms increased learnability cost with magic.",
+                "Approximate magic estimator calibration envelope vs exact M2.",
+            ],
+        )
+        _add_image_page(
+            pdf,
+            "Key Results V: Stage-2 Cross-Model Bounds",
+            [
+                _pick_image(outputs, "fig_stage2_crossmodel_pooled_r.png"),
+                _pick_image(outputs, "fig_stage2_beta_bounds.png"),
+                _pick_image(outputs, "fig_stage2_mechanism_arch_slope.png"),
+                _pick_image(outputs, "fig_stage2_corridor_robustness_all_arch.png"),
+            ],
+            [
+                "Cross-model pooled primary effects (magic -> validation NLL | entropy).",
+                "Bootstrap CI bounds for entropy-controlled magic slope beta_magic.",
+                "Cluster-robust mechanism regression: positive beta_magic lower bounds by architecture.",
+                "All-architecture robustness: beta-law is stable, correlation-sign law is heterogeneous.",
+            ],
+        )
+        _add_image_page(
+            pdf,
+            "Key Results VI: Stage-3 Null-Disproof Stress",
+            [
+                _pick_image(outputs, "fig_stage3_beta_forest.png"),
+                _pick_image(outputs, "fig_stage3_perm_qvalues.png"),
+                _pick_image(outputs, "fig_stage3_partial_sign_heatmap.png"),
+            ],
+            [
+                "Stage-3 forest plot: beta_magic confidence bounds across Schwinger/TFIM/XXZ cells.",
+                "Stage-3 condition-wise permutation null tests with BH-FDR correction.",
+                "Stage-3 partial-correlation lower-CI heatmap (sign-law heterogeneity map).",
+            ],
+        )
+        _add_image_page(
+            pdf,
+            "Key Results VII: Stage-4 Thermodynamic + Theory Checks",
+            [
+                _pick_image(outputs, "fig_stage4_beta_by_size.png"),
+                _pick_image(outputs, "fig_stage4_beta_inf_forest.png"),
+                _pick_image(outputs, "fig_stage4_quantile_bound.png"),
+            ],
+            [
+                "Finite-size beta-law trend by model family and architecture.",
+                "N→∞ extrapolation of beta-law cells with uncertainty.",
+                "Quantile-regression lower-envelope positivity check for beta_magic.",
+            ],
+        )
+        _add_image_page(
+            pdf,
+            "Key Results VIII: Stage-5 External Family + Regime Stress",
+            [
+                _pick_image(outputs, "fig_stage5_beta_forest.png"),
+                _pick_image(outputs, "fig_stage5_regime_minimax.png"),
+                _pick_image(outputs, "fig_stage5_regime_heatmap.png"),
+            ],
+            [
+                "External-family extension (ANNNI added): cell-level beta-law bounds remain positive.",
+                "Adversarial minimax regime bound shows where strict regime-universal positivity fails.",
+                "Regime boundary heatmap: explicit support/failure map for beta_magic CI lower bounds.",
+            ],
+        )
         _add_text_page(
             pdf,
             "Roadmap",
@@ -140,7 +227,7 @@ def main() -> None:
                 "4) Build Trotterized circuit path for hardware-facing experiments.",
                 "",
                 "Caveat:",
-                "  Current claims are small-N exact results; trend-level, not thermodynamic-limit proof.",
+                "  Current claims are corridor-scoped empirical laws; not model-independent theorems.",
             ],
         )
 

@@ -1,0 +1,27 @@
+stage2_base_dir: outputs/stage2_prlx/universal_scan_v2
+out_dir: outputs/stage3_prx/universal_extension_v3
+
+n_sites: [6, 8]
+delta_values: [0.2]
+h0: 0.2
+h1_values: [0.6, 1.0, 1.4, 1.8, 2.2]
+jxy: 1.0
+hz: 0.4
+t_max: 2.0
+n_steps: 11
+
+architectures: [gru, made, independent]
+seeds: [11, 17]
+hidden_size: 48
+epochs: 24
+measurement_samples: 2200
+snapshot_count: 6
+val_fraction: 0.2
+lr: 0.001
+batch_size: 256
+threshold_nll: 4.0
+
+bootstrap: 220
+permutations: 220
+lambda_quantile: 0.4
+fdr_alpha: 0.05

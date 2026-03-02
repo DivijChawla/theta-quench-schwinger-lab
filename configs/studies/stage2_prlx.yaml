@@ -1,0 +1,62 @@
+study_id: stage2_prlx
+primary_endpoint: pearson_magic_vs_val_nll_partial_entropy
+power_target: "Finite-size and cross-regime generalization with power for r in [0.20,0.30]"
+models: [gru, rbm, independent, made]
+size_grid: [8, 10, 12]
+regime_grid:
+  - { name: baseline, mass: 0.5, coupling_g: 1.0 }
+  - { name: alt_baseline, mass: 0.2, coupling_g: 1.3 }
+  - { name: alt_heavy_mass, mass: 0.9, coupling_g: 0.8 }
+  - { name: alt_strong_coupling, mass: 0.1, coupling_g: 1.6 }
+
+phases:
+  stage2:
+    runs:
+      - name: stage2_baseline_n8_n10
+        config: configs/novelty.yaml
+        out_dir: outputs/stage2_prlx/baseline_n8_n10
+        n_sites: [8, 10]
+        theta1: [0.0, 0.8, 1.2, 1.6, 2.0, 2.4]
+        architectures: [gru, rbm, independent, made]
+        seeds: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
+        hidden_sizes: [48]
+        bootstrap: 300
+        permutations: 500
+        epochs: 60
+        measurement_samples: 6000
+        snapshot_count: 8
+        checkpoint_every: 8
+
+      - name: stage2_n12_approx_magic
+        config: configs/n12_sector.yaml
+        out_dir: outputs/stage2_prlx/n12_approx_magic
+        n_sites: [12]
+        theta1: [0.0, 1.2, 2.4]
+        architectures: [gru, rbm, independent, made]
+        seeds: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
+        hidden_sizes: [48]
+        bootstrap: 300
+        permutations: 500
+        approx_magic_samples: 20000
+        epochs: 45
+        measurement_samples: 5000
+        snapshot_count: 6
+        checkpoint_every: 4
+
+      - name: stage2_cross_regime_alt
+        config: configs/alt_regime.yaml
+        out_dir: outputs/stage2_prlx/alt_regime
+        n_sites: [8, 10]
+        theta1: [0.0, 0.9, 1.8, 2.7]
+        architectures: [gru, rbm, independent, made]
+        seeds: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
+        hidden_sizes: [48]
+        bootstrap: 300
+        permutations: 500
+        epochs: 55
+        measurement_samples: 5500
+        snapshot_count: 7
+        checkpoint_every: 6
+    aggregate:
+      publishability_out: report/publishability_status.md
+      regime_sensitivity_out: report/regime_sensitivity.md

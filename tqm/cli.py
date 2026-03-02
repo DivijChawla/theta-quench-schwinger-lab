@@ -7,6 +7,8 @@ import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 
 if "MPLCONFIGDIR" not in os.environ:
     os.environ["MPLCONFIGDIR"] = str((Path.cwd() / ".mplconfig").resolve())
@@ -207,6 +209,9 @@ def run_all(cfg: ExperimentConfig) -> None:
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Theta-Quench Schwinger Lab CLI")
     p.add_argument("--config", type=str, default=None, help="Path to YAML config")
+    p.add_argument("--study", type=str, default=None, help="Study id from configs/studies/<id>.yaml")
+    p.add_argument("--phase", type=str, default="stage1", choices=["stage1", "stage2", "stage3"], help="Study phase")
+    p.add_argument("--dry-run", action="store_true", help="Dry-run registry study commands")
 
     group = p.add_mutually_exclusive_group()
     group.add_argument("--all", action="store_true", help="Run full pipeline")
@@ -217,9 +222,27 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
+def _run_registered_study(study: str, phase: str, dry_run: bool) -> None:
+    cmd = [
+        sys.executable,
+        "experiments/run_registered_study.py",
+        "--study",
+        study,
+        "--phase",
+        phase,
+    ]
+    if dry_run:
+        cmd.append("--dry-run")
+    subprocess.run(cmd, check=True, cwd=Path(__file__).resolve().parents[1])
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
+
+    if args.study:
+        _run_registered_study(args.study, args.phase, args.dry_run)
+        return
 
     cfg = load_config(args.config)
 
