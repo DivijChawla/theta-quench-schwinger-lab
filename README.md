@@ -183,6 +183,13 @@ pip install -e .
 - stage1 completion gate: `report/stage1_completion.md`
 - stage2 universal-law program: `report/stage2_program.md`
 
+Build the manuscript-style PDF:
+
+```bash
+brew install tectonic
+make report-pdf
+```
+
 ## Camera-Ready Artifact
 
 Build frozen release bundle (configs + outputs + manuscript):

@@ -3,27 +3,36 @@
 \usepackage{amsmath,amssymb,bm}
 \usepackage{graphicx}
 \usepackage{booktabs}
-\usepackage{hyperref}
+\usepackage[hypertexnames=false,hidelinks]{hyperref}
 \usepackage{siunitx}
 \usepackage{physics}
 \usepackage{float}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
 
-\title{Theta-Quench Schwinger Lab:\\Dynamical Transitions, Stabilizer-Renyi Magic, and NNQS Learnability}
-\author{Computational Study Pipeline}
+\title{A Scoped Empirical Claim on Magic--Learnability Coupling\\in $\theta$-Quench Schwinger Dynamics}
+\author{Divij Chawla\\Independent Undergraduate Research Note}
 \date{\today}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We implement an end-to-end computational framework for sudden $\theta$-quenches in the $(1+1)$D lattice Schwinger model with staggered fermions and open boundaries, mapped to qubits after Gauss-law elimination. For small chains ($N\lesssim 12$), we compute exact ground states, unitary post-quench dynamics, Loschmidt diagnostics, connected correlators, bipartite entanglement, and stabilizer-Renyi magic $M_\alpha$. We then fit time snapshots with multiple neural quantum state families (autoregressive GRU, MADE, exact-normalized RBM, and an independent baseline) and quantify learnability by validation NLL, KL, TV, and convergence speed. Stage-1 yields a \emph{scoped} claim: strong small-$N$ baseline evidence for a magic--learnability link with explicit regime/size boundaries. Stage-2 adds cross-model tests (Schwinger + TFIM), finite-size trend diagnostics, and bound-style checks; an all-architecture entropy-controlled beta-law is supported in the tested corridor, while a universal correlation-sign law fails and remains architecture-dependent.
+This note reports evidence for a conditional claim: in a clearly specified post-quench corridor, higher stabilizer-Renyi magic is associated with worse NNQS learnability (higher validation NLL), including after entropy control. The testbed is the $(1+1)$D open-boundary lattice Schwinger model with exact small-$N$ dynamics ($N\lesssim 12$), supplemented by cross-family stress tests (TFIM, XXZ, ANNNI). We compute Loschmidt diagnostics, correlators, entanglement, and magic $M_\alpha$, then evaluate learnability across GRU, MADE, RBM, and independent baselines with bootstrap/permutation/FDR gates. The data support a robust entropy-controlled slope law in the tested corridor and cross-family cells, while strict all-regime and theorem-level universal statements are not supported.
 \end{abstract}
 
 \section{Introduction}
-We study whether non-stabilizerness (quantified by stabilizer-Renyi magic) predicts neural learnability degradation in real-time lattice gauge dynamics. The objective is a \emph{decision-safe} empirical claim: identify when the effect is present, and map where it fails.
+The central question is whether non-stabilizerness (measured by stabilizer-Renyi magic) predicts neural learnability degradation in real-time many-body dynamics. The goal is not a universal theorem claim; instead, the goal is a reviewer-safe empirical statement with explicit support boundaries and explicit failure boundaries.
+
+\section{Primary claim and boundaries}
+\textbf{Supported claim.} In the declared dynamical corridor of this study, higher magic predicts higher validation NLL under entropy control, with positive lower confidence bounds for the magic slope in cross-family cell-level tests.
+
+\textbf{Not claimed.} A model-independent universal law, strict all-regime positivity, and theorem-level guarantees are not established by this dataset.
+
+\textbf{Publication position.} The current evidence supports a scoped mechanism claim suitable for a focused empirical paper (conditional law with boundary map), not a universal-law paper.
 
 \section{Related work}
-Our setup combines three strands: (i) Schwinger-model quench diagnostics (Loschmidt and correlator structure), (ii) stabilizer-magic complexity measures in many-body states, and (iii) neural quantum state fitting of measurement distributions. The contribution here is the integrated claim-gated pipeline linking all three with explicit boundary analysis.
+Our setup combines three strands: (i) Schwinger-model quench diagnostics (Loschmidt and correlator structure), (ii) stabilizer-magic complexity measures in many-body states, and (iii) neural quantum state fitting of measurement distributions. The contribution here is an integrated, claim-gated evidence package linking these strands with explicit boundary analysis.
 
 \section{Model and Hamiltonian decomposition}
 We work with staggered matter on $N$ sites and open boundaries. The spin Hamiltonian is decomposed as
@@ -86,7 +95,7 @@ We regress validation NLL/KL/TV versus snapshot $M_2$ and apply bootstrap/permut
 In the generated figure set, the primary scatter uses final validation NLL versus $M_2$, while exact KL and TV are retained in accompanying CSV outputs.
 
 \section{Validation checks}
-The pipeline enforces and stores:
+We enforce and report:
 \begin{itemize}
     \item Hermiticity of $H(\theta_0)$ and $H(\theta_1)$,
     \item norm conservation drift $\max_t\left|\lVert\psi(t)\rVert^2-1\right|$,
@@ -95,61 +104,61 @@ The pipeline enforces and stores:
 \end{itemize}
 
 \section{Figure set and interpretation}
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.9\linewidth]{figs/fig1_loschmidt_family.png}
     \caption{Loschmidt rate function $\lambda(t)$ for multiple quench endpoints $\theta_1$. Nonanalytic-like sharp features emerge under stronger quenches.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.9\linewidth]{figs/fig2_magic_lambda_overlay.png}
     \caption{Overlay of $\lambda(t)$ and $M_2(t)$ for a strong quench. Peaks in transition diagnostics co-occur with rapid magic growth windows.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.95\linewidth]{figs/fig3_heatmaps_lambda_magic.png}
     \caption{Heatmaps over $(t,\theta_1)$ for Loschmidt rate and magic. Quench-strength dependence appears in both landscapes.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.8\linewidth]{figs/fig4_nnqs_loss_vs_magic.png}
     \caption{NNQS final validation loss versus snapshot magic $M_2$. The fitted slope quantifies the learnability penalty from non-stabilizerness; exact KL and TV are also reported in CSV outputs.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.8\linewidth]{figs/fig5_entropy_vs_magic.png}
     \caption{Optional entropy-versus-magic trajectory colored by time, showing relation and mismatch between entanglement and stabilizer complexity.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.9\linewidth]{figs/fig6_regime_boundary_magic_valnll.png}
     \caption{Regime/size boundary map for magic vs validation NLL (pooled correlation, with verdict annotations). Baseline support does not universally transfer across alternate $(m,g)$ regimes or the current $N=10$ exact setup.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.82\linewidth]{figs/fig7_positive_control_scatter.png}
     \caption{Positive-control synthetic family: increasing non-stabilizerness produces higher optimization difficulty (validation NLL) across NNQS baselines, supporting construct validity of the learnability metric.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.82\linewidth]{figs/fig8_magic_calibration.png}
     \caption{Approximate magic estimator calibration versus exact $M_2$ at tractable sizes. Error decreases with Pauli-sample budget and defines the reported approximation envelope.}
 \end{figure}
 
-\section{Robustness and claim scope}
+\section{Evidence summary for the claim}
 Baseline ($N=6,8$) cross-architecture runs support \texttt{magic $\rightarrow$ validation NLL} and the entropy-controlled variant. A higher-seed full-$\theta$ rerun remains supported. However, stronger $N=10$ exact-magic stress runs and multi-regime replications show that this relation is not universal under current settings. The defensible statement is therefore conditional: magic--learnability coupling is regime- and size-dependent in this small-$N$ exact study.
 
-Stage-1 gate status is tracked in a standardized effect registry (\texttt{outputs/stage1\_prxq/stage1/effect\_registry.json}) with explicit flags for headline-region support and documented boundary failures.
+Gate status is tracked in a standardized effect registry (\path{outputs/stage1_prxq/stage1/effect_registry.json}) with explicit flags for headline-region support and documented boundary failures.
 
-\section{Stage-2 cross-model generalization analysis}
-To stress-test cross-model generalization, we augment Stage-1 Schwinger outputs with a second many-body family (TFIM), and evaluate a dynamical corridor defined by large Loschmidt-rate conditions. We report:
+\section{Cross-model expansion (Schwinger + TFIM)}
+To stress-test generalization, we augment Schwinger outputs with a second many-body family (TFIM), and evaluate a dynamical corridor defined by large Loschmidt-rate conditions. We report:
 \begin{itemize}
     \item pooled Fisher-$z$ meta-effects for the primary endpoint \texttt{magic $\rightarrow$ val NLL $|$ entropy},
     \item bootstrap confidence bounds for the entropy-controlled slope $\beta_\mathrm{magic}$ in
@@ -162,104 +171,104 @@ To stress-test cross-model generalization, we augment Stage-1 Schwinger outputs 
 
 The all-architecture beta-law gate passes (\(\beta_\mathrm{magic}>0\) with confidence and quantile robustness), including a cluster-robust mechanism regression with positive lower bounds for each architecture. However, the all-architecture correlation-sign gate fails due heterogeneity in one weak TFIM baseline, while the expressive-only sign gate (GRU/MADE) passes across tested corridor quantiles.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage2_crossmodel_pooled_r.png}
     \caption{Stage-2 pooled primary endpoint effects (\texttt{magic $\rightarrow$ val NLL $|$ entropy}) across Schwinger and TFIM.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage2_beta_bounds.png}
     \caption{Bootstrap confidence intervals for entropy-controlled magic slope $\beta_\mathrm{magic}$.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage2_mechanism_arch_slope.png}
     \caption{Cluster-robust mechanism regression: architecture-specific confidence intervals for $\beta_\mathrm{magic}$.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage2_corridor_robustness_all_arch.png}
     \caption{Corridor-threshold robustness for all architectures: beta-law remains supported across tested quantiles, while sign-law is not robust.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage2_corridor_robustness_expressive.png}
     \caption{Corridor-threshold robustness for expressive architectures (GRU/MADE): gate passes across tested quantiles.}
 \end{figure}
 
-\section{Stage-3 adversarial extension (third model family)}
+\section{Adversarial expansion (adding XXZ)}
 We then perform a stricter adversarial extension by adding XXZ quenches and testing two null-disproof gates at cell level (model family $\times$ architecture): (i) bootstrap CI lower bound on $\beta_\mathrm{magic}$ and (ii) one-sided permutation null with BH-FDR correction. We include an XXZ regime tuning plus size stress through $N=12$ using an approximate-magic calibration envelope, and evaluate the expressive architecture subset (GRU/MADE).
 
-Result: in this tested Stage-3 corridor, both the extended beta-law gate and the sign-law gate pass. This strengthens the mechanistic statement for expressive models: entropy-controlled slope positivity is robust under cross-family extension, and partial-correlation direction is consistent inside the declared corridor.
+Result: in this tested corridor, both the extended beta-law gate and the sign-law gate pass. This strengthens the mechanistic statement for expressive models: entropy-controlled slope positivity is robust under cross-family extension, and partial-correlation direction is consistent inside the declared corridor.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage3_beta_forest.png}
     \caption{Stage-3 cell-level $\beta_\mathrm{magic}$ confidence intervals across Schwinger, TFIM, and XXZ.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage3_perm_qvalues.png}
     \caption{Stage-3 permutation null-disproof q-values (BH-FDR). In the tuned extension corridor, all beta-law cells pass $q<0.05$.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage3_partial_sign_heatmap.png}
     \caption{Stage-3 lower-CI heatmap for partial-correlation endpoint in the expressive corridor; all tested cells remain positive.}
 \end{figure}
 
-\section{Stage-4 thermodynamic and theory checks}
+\section{Finite-size and lower-envelope checks}
 We further stress the beta-law with a finite-size extrapolation and a lower-envelope (quantile regression) check:
 \begin{itemize}
     \item finite-size cell fits of \(\beta_\mathrm{magic}(N)\) with weighted extrapolation to \(N\to\infty\),
     \item quantile regression (\(\tau=0.1,0.2,0.3\)) of validation NLL on magic and entropy controls as an empirical lower-bound proxy.
 \end{itemize}
 
-Outcome: both gates are positive in the tested Stage-3 corridor dataset: the all-cell thermodynamic extrapolation gate (\(\beta_{\infty,\mathrm{CI\,low}}>0\)) and the quantile lower-envelope gate are satisfied. This supports a stronger empirical law in the declared corridor, while remaining distinct from a theorem-level model-independent claim.
+Outcome: both gates are positive in the tested corridor dataset: the all-cell thermodynamic extrapolation gate (\(\beta_{\infty,\mathrm{CI\,low}}>0\)) and the quantile lower-envelope gate are satisfied. This supports a stronger empirical law in the declared corridor, while remaining distinct from a theorem-level model-independent claim.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage4_beta_by_size.png}
     \caption{Stage-4 finite-size trends of \(\beta_\mathrm{magic}\) by model family and architecture.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage4_beta_inf_forest.png}
     \caption{Stage-4 weighted extrapolation of \(\beta_\mathrm{magic}\) to \(N\to\infty\): all tested corridor cells remain positive within uncertainty.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage4_quantile_bound.png}
     \caption{Stage-4 quantile-regression lower-envelope check: magic coefficient remains positive at tested quantiles.}
 \end{figure}
 
-\section{Stage-5 external-family and regime stress}
-We extend beyond Stage-4 by adding a fourth many-body family (ANNNI) with multiple additional regimes, then re-run corridor-gated beta-law and lower-envelope checks. The purpose is to test whether the Stage-4 mechanism survives adversarial cross-regime stress.
+\section{External-family and regime stress (adding ANNNI)}
+We extend the study by adding a fourth many-body family (ANNNI) with multiple additional regimes, then re-run corridor-gated beta-law and lower-envelope checks. The purpose is to test whether the mechanism survives adversarial cross-regime stress.
 
 Outcome: family$\times$architecture cell-level gates remain positive (bootstrap lower bounds and permutation-FDR), and quantile lower-envelope positivity remains intact. However, strict all-regime minimax positivity fails due Schwinger \texttt{alt\_baseline} cells. This establishes a sharper boundary statement: the mechanism is robust across families in the declared corridor, but not globally regime-universal.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage5_beta_forest.png}
     \caption{Stage-5 beta-law bounds after adding ANNNI. Cell-level positivity is preserved across tested families and architectures.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figs/fig_stage5_regime_minimax.png}
     \caption{Stage-5 minimax regime bound: worst-case regime lower bounds identify where strict regime-universal claims fail.}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
     \centering
     \includegraphics[width=0.9\linewidth]{figs/fig_stage5_regime_heatmap.png}
     \caption{Stage-5 regime boundary heatmap (\(\beta_\mathrm{magic}\) CI lower bound), explicitly marking supportive vs failing regions.}
@@ -284,7 +293,7 @@ From repository root:
 \begin{verbatim}
 python -m tqm.run --config configs/default.yaml --all
 \end{verbatim}
-This generates data in \texttt{outputs/} and figures in \texttt{outputs/figs/}. Copy figures to \texttt{report/figs/} and compile this document.
+This generates data in \texttt{outputs/} and figures in \texttt{outputs/figs/}. The report builder auto-syncs figure assets into \texttt{report/figs/} before compiling this manuscript.
 The default run includes NNQS and requires PyTorch. A torch-free fallback is available via \texttt{configs/no\_nnqs.yaml}.
 
 \section{Reproducibility appendix}
@@ -292,8 +301,8 @@ The repository includes:
 \begin{itemize}
     \item pre-registered analysis protocol (\texttt{report/analysis\_protocol.md}),
     \item standardized study registry (\texttt{configs/studies/*.yaml}),
-    \item standardized effect registry output (\texttt{outputs/<study>/<phase>/effect\_registry.json}),
-    \item Stage-2 registry and robustness packet (\texttt{outputs/stage2\_prlx/stage2/effect\_registry.json}, \texttt{report/stage2\_completion.md}),
+    \item standardized effect registry output (\path{outputs/<study>/<phase>/effect_registry.json}),
+    \item Stage-2 registry and robustness packet (\path{outputs/stage2_prlx/stage2/effect_registry.json}, \path{report/stage2_completion.md}),
     \item camera-ready freezing command (\texttt{make camera-ready}) that archives configs, outputs, and manuscript assets.
 \end{itemize}
 
