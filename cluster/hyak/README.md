@@ -42,6 +42,8 @@ cd /gscratch/scrubbed/$USER/theta_quench_magic_lab
 bash cluster/hyak/bootstrap_env.sh
 ```
 
+This script prefers a repo-local conda env at `.conda-hyak` using Python 3.11, which avoids the too-old `/usr/bin/python3` on Klone login nodes.
+
 ## Submit jobs
 
 Current live `hyakalloc` output for this account shows:

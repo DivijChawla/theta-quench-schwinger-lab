@@ -14,11 +14,10 @@ set -euo pipefail
 set -x
 
 PROJECT_ROOT="${PROJECT_ROOT:-/gscratch/scrubbed/${USER}/theta_quench_magic_lab}"
-VENV_DIR="${VENV_DIR:-${PROJECT_ROOT}/.venv-hyak}"
+PYTHON_BIN="${PYTHON_BIN:-${PROJECT_ROOT}/.conda-hyak/bin/python}"
 
 mkdir -p "${PROJECT_ROOT}/slurm_logs"
 cd "$PROJECT_ROOT"
-source "$VENV_DIR/bin/activate"
 
 TMP_BASE="${SLURM_TMPDIR:-${TMPDIR:-/tmp}}"
 JOB_TMP="${TMP_BASE}/${USER}/theta_quench_stage4_${SLURM_JOB_ID}"
@@ -30,4 +29,4 @@ export PYTHONUNBUFFERED=1
 export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK:-1}"
 export MKL_NUM_THREADS="${SLURM_CPUS_PER_TASK:-1}"
 
-make stage4-prl
+make PYTHON="$PYTHON_BIN" stage4-prl
