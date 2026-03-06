@@ -42,7 +42,7 @@ cd /gscratch/scrubbed/$USER/theta_quench_magic_lab
 bash cluster/hyak/bootstrap_env.sh
 ```
 
-This script prefers a Python 3.11 conda env at `~/.conda-envs/theta-quench-magic-lab`, which avoids the too-old `/usr/bin/python3` on Klone login nodes and keeps the environment off `/gscratch/scrubbed`, where a direct env create left a partial install.
+This script prefers a Python 3.11 conda env at `/gscratch/scrubbed/$USER/conda-envs/theta-quench-magic-lab` and uses a package cache at `/gscratch/scrubbed/$USER/conda-pkgs`, which avoids the too-old `/usr/bin/python3` on Klone login nodes and stays off the quota-limited home directory.
 
 ## Submit jobs
 
@@ -59,6 +59,19 @@ sbatch --account=stf --partition=gpu-l40s cluster/hyak/stage2_ckpt.slurm
 sbatch --account=stf --partition=gpu-l40s cluster/hyak/stage4_ckpt.slurm
 sbatch --account=stf --partition=gpu-l40s cluster/hyak/stage5_ckpt.slurm
 ```
+
+For an overnight batch chain that keeps running after you close your laptop:
+
+```bash
+bash cluster/hyak/submit_overnight.sh
+```
+
+This submits:
+
+- a CPU setup job that builds the Python environment on Hyak,
+- a stage-2 GPU job after setup succeeds,
+- a stage-4 GPU job after setup succeeds,
+- a stage-5 GPU job after setup succeeds.
 
 ## Monitoring
 

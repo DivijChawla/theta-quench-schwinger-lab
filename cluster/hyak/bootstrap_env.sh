@@ -3,7 +3,8 @@ set -euo pipefail
 
 PROJECT_ROOT="${PROJECT_ROOT:-/gscratch/scrubbed/${USER}/theta_quench_magic_lab}"
 CONDA_BIN="${CONDA_BIN:-${HOME}/miniconda3/bin/conda}"
-CONDA_ENV_DIR="${CONDA_ENV_DIR:-${HOME}/.conda-envs/theta-quench-magic-lab}"
+CONDA_ENV_DIR="${CONDA_ENV_DIR:-/gscratch/scrubbed/${USER}/conda-envs/theta-quench-magic-lab}"
+CONDA_PKGS_DIRS="${CONDA_PKGS_DIRS:-/gscratch/scrubbed/${USER}/conda-pkgs}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 VENV_DIR="${VENV_DIR:-${PROJECT_ROOT}/.venv-hyak}"
 
@@ -11,6 +12,8 @@ cd "$PROJECT_ROOT"
 
 if [ -x "$CONDA_BIN" ]; then
   mkdir -p "$(dirname "$CONDA_ENV_DIR")"
+  mkdir -p "$CONDA_PKGS_DIRS"
+  export CONDA_PKGS_DIRS
   "$CONDA_BIN" create -y -p "$CONDA_ENV_DIR" python=3.11 pip
   "$CONDA_ENV_DIR/bin/python" -m pip install --upgrade pip
   "$CONDA_ENV_DIR/bin/python" -m pip install -r requirements.txt
