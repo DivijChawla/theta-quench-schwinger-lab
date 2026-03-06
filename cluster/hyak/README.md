@@ -42,7 +42,7 @@ cd /gscratch/scrubbed/$USER/theta_quench_magic_lab
 bash cluster/hyak/bootstrap_env.sh
 ```
 
-This script prefers a repo-local conda env at `.conda-hyak` using Python 3.11, which avoids the too-old `/usr/bin/python3` on Klone login nodes.
+This script prefers a Python 3.11 conda env at `~/.conda-envs/theta-quench-magic-lab`, which avoids the too-old `/usr/bin/python3` on Klone login nodes and keeps the environment off `/gscratch/scrubbed`, where a direct env create left a partial install.
 
 ## Submit jobs
 

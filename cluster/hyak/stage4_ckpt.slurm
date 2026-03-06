@@ -14,7 +14,8 @@ set -euo pipefail
 set -x
 
 PROJECT_ROOT="${PROJECT_ROOT:-/gscratch/scrubbed/${USER}/theta_quench_magic_lab}"
-PYTHON_BIN="${PYTHON_BIN:-${PROJECT_ROOT}/.conda-hyak/bin/python}"
+CONDA_ENV_DIR="${CONDA_ENV_DIR:-${HOME}/.conda-envs/theta-quench-magic-lab}"
+PYTHON_BIN="${PYTHON_BIN:-${CONDA_ENV_DIR}/bin/python}"
 
 mkdir -p "${PROJECT_ROOT}/slurm_logs"
 cd "$PROJECT_ROOT"
