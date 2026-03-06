@@ -370,7 +370,7 @@ def _run_tfim_suite(cfg: UniversalConfig, out_dir: Path) -> tuple[pd.DataFrame, 
                             n_sites=n_sites,
                             magic_m2=m2,
                             cfg=nn_cfg,
-                            device="cpu",
+                            device=args.device,
                             model_type=arch,
                         )
                     elif arch == "independent":
@@ -585,6 +585,7 @@ def main() -> None:
     parser.add_argument("--config", type=str, default="configs/stage2_universal.yaml")
     parser.add_argument("--out-dir", type=str, default="outputs/stage2_prlx/universal_scan")
     parser.add_argument("--seed", type=int, default=1234)
+    parser.add_argument("--device", type=str, default="auto", help="NNQS device: auto, cpu, cuda, cuda:0, mps")
     args = parser.parse_args()
 
     cfg = _load_cfg(Path(args.config))

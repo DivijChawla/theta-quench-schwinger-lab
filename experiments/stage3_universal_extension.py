@@ -483,7 +483,7 @@ def _run_xxz_suite(cfg: Stage3Config, out_dir: Path) -> tuple[pd.DataFrame, pd.D
                                 n_sites=n_sites,
                                 magic_m2=m2,
                                 cfg=nn_cfg,
-                                device="cpu",
+                                device=args.device,
                                 model_type=arch,
                             )
                         elif arch == "independent":
@@ -632,6 +632,7 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--registry-out", type=str, default="outputs/stage3_prx/stage3/effect_registry.json")
     parser.add_argument("--report-out", type=str, default="report/stage3_extension.md")
+    parser.add_argument("--device", type=str, default="auto", help="NNQS device: auto, cpu, cuda, cuda:0, mps")
     args = parser.parse_args()
 
     cfg = _load_cfg(Path(args.config), out_override=args.out_dir)

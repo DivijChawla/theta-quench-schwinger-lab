@@ -27,6 +27,22 @@ def _to_tensor(x: np.ndarray, device: torch.device) -> torch.Tensor:
     return torch.tensor(x, dtype=torch.float32, device=device)
 
 
+def _resolve_device(device: str | None) -> torch.device:
+    requested = "auto" if device is None else str(device).strip().lower()
+    if requested == "auto":
+        if torch.cuda.is_available():
+            return torch.device("cuda")
+        if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            return torch.device("mps")
+        return torch.device("cpu")
+    if requested.startswith("cuda") and not torch.cuda.is_available():
+        raise RuntimeError("Requested CUDA device, but torch.cuda.is_available() is False.")
+    if requested.startswith("mps"):
+        if not hasattr(torch.backends, "mps") or not torch.backends.mps.is_available():
+            raise RuntimeError("Requested MPS device, but torch.backends.mps.is_available() is False.")
+    return torch.device(requested)
+
+
 def _build_model(model_type: str, n_sites: int, hidden_size: int) -> torch.nn.Module:
     m = model_type.lower()
     if m == "gru":
@@ -49,7 +65,7 @@ def train_nnqs_on_state(
 
     torch.manual_seed(seed)
     np.random.seed(seed)
-    dev = torch.device(device)
+    dev = _resolve_device(device)
 
     samples = sample_bitstrings_from_state(
         psi=psi,

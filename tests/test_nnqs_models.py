@@ -34,3 +34,28 @@ def test_made_training_smoke() -> None:
     )
     assert np.isfinite(res.final_val_nll)
     assert np.isfinite(res.final_kl)
+
+
+def test_auto_device_training_smoke() -> None:
+    cfg = NNQSConfig(
+        enabled=True,
+        snapshot_count=1,
+        measurement_samples=128,
+        val_fraction=0.2,
+        hidden_size=8,
+        epochs=2,
+        lr=1e-3,
+        batch_size=32,
+        threshold_nll=3.0,
+        seed=5,
+    )
+    res = train_nnqs_on_state(
+        psi=_basis_state(3),
+        n_sites=3,
+        cfg=cfg,
+        seed=5,
+        model_type="gru",
+        device="auto",
+    )
+    assert np.isfinite(res.final_val_nll)
+    assert np.isfinite(res.final_tv)

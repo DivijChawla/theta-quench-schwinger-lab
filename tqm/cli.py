@@ -121,7 +121,7 @@ def _plot_nnqs_histories(histories: dict[int, dict[str, list[float]]], save_path
     plt.close(fig)
 
 
-def _run_nnqs(cfg: ExperimentConfig, runs: list | None = None) -> pd.DataFrame:
+def _run_nnqs(cfg: ExperimentConfig, runs: list | None = None, device: str = "auto") -> pd.DataFrame:
     if importlib.util.find_spec("torch") is None:
         raise ModuleNotFoundError(
             "NNQS requires torch, but torch is not installed in the current environment."
@@ -150,6 +150,7 @@ def _run_nnqs(cfg: ExperimentConfig, runs: list | None = None) -> pd.DataFrame:
         n_sites=cfg.model.n_sites,
         magic_m2=m2,
         cfg=cfg.nnqs,
+        device=device,
     )
     df.to_csv(out_dir / "nnqs" / "nnqs_snapshot_metrics.csv", index=False)
 
@@ -198,10 +199,10 @@ def _sync_report_figs(cfg: ExperimentConfig) -> None:
         shutil.copy2(png, report_fig_dir / png.name)
 
 
-def run_all(cfg: ExperimentConfig) -> None:
+def run_all(cfg: ExperimentConfig, device: str = "auto") -> None:
     runs = _run_sweep(cfg)
     if cfg.nnqs.enabled:
-        _run_nnqs(cfg, runs=runs)
+        _run_nnqs(cfg, runs=runs, device=device)
     _run_validation(cfg)
     _sync_report_figs(cfg)
 
@@ -219,6 +220,7 @@ def build_parser() -> argparse.ArgumentParser:
     group.add_argument("--nnqs", action="store_true", help="Run NNQS on snapshot states")
     group.add_argument("--validate", action="store_true", help="Run validation checks")
     p.add_argument("--theta1", type=float, default=None, help="Single-quench theta1 override")
+    p.add_argument("--device", type=str, default="auto", help="NNQS device: auto, cpu, cuda, cuda:0, mps")
     return p
 
 
@@ -256,13 +258,13 @@ def main(argv: list[str] | None = None) -> None:
         _run_sweep(cfg)
         return
     if args.nnqs:
-        _run_nnqs(cfg)
+        _run_nnqs(cfg, device=args.device)
         return
     if args.validate:
         _run_validation(cfg)
         return
 
-    run_all(cfg)
+    run_all(cfg, device=args.device)
 
 
 if __name__ == "__main__":

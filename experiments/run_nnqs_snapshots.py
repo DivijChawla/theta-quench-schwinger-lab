@@ -16,6 +16,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run NNQS learnability study on quench snapshots")
     parser.add_argument("--config", type=str, default="configs/default.yaml")
     parser.add_argument("--theta1", type=float, default=None, help="Override theta1 for snapshot source")
+    parser.add_argument("--device", type=str, default="auto", help="NNQS device: auto, cpu, cuda, cuda:0, mps")
     args = parser.parse_args()
 
     cfg = load_config(args.config)
@@ -43,6 +44,7 @@ def main() -> None:
         n_sites=cfg.model.n_sites,
         magic_m2=m2,
         cfg=cfg.nnqs,
+        device=args.device,
     )
     df.to_csv(out_dir / "nnqs" / "nnqs_snapshot_metrics.csv", index=False)
     plot_nnqs_scatter(df, fig_dir / "fig4_nnqs_loss_vs_magic.png")

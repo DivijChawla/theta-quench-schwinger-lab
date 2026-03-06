@@ -472,6 +472,7 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=2027)
     parser.add_argument("--registry-out", type=str, default="outputs/stage5_prx/stage5/effect_registry.json")
     parser.add_argument("--report-out", type=str, default="report/stage5_external_regime.md")
+    parser.add_argument("--device", type=str, default="auto", help="NNQS device: auto, cpu, cuda, cuda:0, mps")
     args = parser.parse_args()
 
     cfg = _load_cfg(Path(args.config), out_override=args.out_dir)
@@ -546,7 +547,7 @@ def main() -> None:
                                 n_sites=n_sites,
                                 magic_m2=m2,
                                 cfg=nn_cfg,
-                                device="cpu",
+                                device=args.device,
                                 model_type=arch,
                             )
                             df_snap = df_snap.copy()
