@@ -52,12 +52,17 @@ Current live `hyakalloc` output for this account shows:
 - GPU partitions: `gpu-l40s`, `gpu-l40`, `gpu-2080ti`
 - best default right now: `gpu-l40s`
 
-The Slurm scripts therefore default to `stf` on `gpu-l40s` with one GPU. Override at submit time if queue pressure changes:
+The most reliable overnight pattern for this account is:
+
+- CPU environment build on `stf` / `compute`
+- GPU experiment jobs on `stf-ckpt` / `ckpt-all` / `qos=ckpt`
+
+You can still override partition/account choices at submit time if queue pressure changes:
 
 ```bash
-sbatch --account=stf --partition=gpu-l40s cluster/hyak/stage2_ckpt.slurm
-sbatch --account=stf --partition=gpu-l40s cluster/hyak/stage4_ckpt.slurm
-sbatch --account=stf --partition=gpu-l40s cluster/hyak/stage5_ckpt.slurm
+sbatch --account=stf-ckpt --partition=ckpt-all --qos=ckpt cluster/hyak/stage2_ckpt.slurm
+sbatch --account=stf-ckpt --partition=ckpt-all --qos=ckpt cluster/hyak/stage4_ckpt.slurm
+sbatch --account=stf-ckpt --partition=ckpt-all --qos=ckpt cluster/hyak/stage5_ckpt.slurm
 ```
 
 For an overnight batch chain that keeps running after you close your laptop:
@@ -66,12 +71,12 @@ For an overnight batch chain that keeps running after you close your laptop:
 bash cluster/hyak/submit_overnight.sh
 ```
 
-This submits:
+By default this submits:
 
-- a CPU setup job that builds the Python environment on Hyak,
-- a stage-2 GPU job after setup succeeds,
-- a stage-4 GPU job after setup succeeds,
-- a stage-5 GPU job after setup succeeds.
+- a CPU setup job on `compute` that builds the Python environment on Hyak,
+- a stage-2 GPU job on `ckpt-all` after setup succeeds,
+- a stage-4 GPU job on `ckpt-all` after setup succeeds,
+- a stage-5 GPU job on `ckpt-all` after setup succeeds.
 
 ## Monitoring
 
