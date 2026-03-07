@@ -66,13 +66,44 @@
           <dt>Status</dt><dd>Loading…</dd>
         </dl>
       </article>
+      <article class="card">
+        <h2>Hyak Replications</h2>
+        <dl class="kv" id="hyak-kv">
+          <dt>Status</dt><dd>Loading…</dd>
+        </dl>
+      </article>
     </section>
 
     <section class="section">
       <div class="warn">
         This is a small-N exact study. Strong claims are limited to this regime.
         The robust finding is magic vs optimization difficulty (validation NLL),
-        with explicit boundary mapping: Stage 2 sign-law is architecture-dependent, Stage 3/4 support a stronger corridor-level beta-law mechanism, and Stage 5 identifies regime-level failure zones (notably Schwinger alt-baseline).
+        with explicit boundary mapping: checkpoint-GPU reruns strengthen the GRU / MADE / RBM baseline evidence, the current exact N=10 rerun only supports the entropy-controlled endpoint, and alternate regimes remain mixed or unsupported.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Hyak Checkpoint Replications</h2>
+      <div class="warn">
+        Plain-English takeaway: in the main dynamical corridor, higher magic repeatedly coincides with worse NNQS validation loss across GRU, MADE, and RBM. At exact N=10, the raw trend is noisy, but once entropy is controlled the effect stays positive. Heavy-mass runs are mixed, and strong-coupling runs do not support the same claim.
+      </div>
+      <div class="figure-grid">
+        <figure class="figure">
+          <img src="figs/hyak_gru_global_scatter.png" alt="Hyak GRU scatter" />
+          <figcaption>Hyak GRU rerun: the baseline corridor retains a strong positive magic-versus-validation-loss trend.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/hyak_made_global_scatter.png" alt="Hyak MADE scatter" />
+          <figcaption>Hyak MADE rerun: changing the autoregressive architecture does not remove the effect.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/hyak_rbm_global_scatter.png" alt="Hyak RBM scatter" />
+          <figcaption>Hyak RBM rerun: the exact-normalized baseline shows the same qualitative coupling, strongly.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="figs/hyak_n10_global_scatter.png" alt="Hyak N10 scatter" />
+          <figcaption>Hyak exact N=10 rerun: raw correlation is noisy, so the safer claim is the entropy-controlled endpoint.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -280,11 +311,21 @@ python3 experiments/nnqs_seed_sweep.py --config configs/default.yaml --seeds 11,
           ["Spearman(magic, val NLL)", `${fmt(n.spearman_magic_vs_val_nll)} (p=${fmt(n.spearman_p_magic_vs_val_nll)})`],
           ["Pearson(magic, KL)", `${fmt(n.pearson_magic_vs_kl)} (p=${fmt(n.pearson_p_magic_vs_kl)})`],
         ]);
+
+        const h = m.hyak || {};
+        addKV("hyak-kv", [
+          ["GRU baseline partial r", fmt(h.gru_baseline_partial_r)],
+          ["MADE partial r", fmt(h.made_partial_r)],
+          ["RBM partial r", fmt(h.rbm_partial_r)],
+          ["N=10 partial status", h.n10_partial_status || "n/a"],
+          ["Heavy / strong regimes", `${h.heavy_mass_status || "n/a"} / ${h.strong_coupling_status || "n/a"}`],
+        ]);
       })
       .catch(() => {
         addKV("validation-kv", [["Status", "metrics.json missing"]]);
         addKV("quench-kv", [["Status", "metrics.json missing"]]);
         addKV("nnqs-kv", [["Status", "metrics.json missing"]]);
+        addKV("hyak-kv", [["Status", "metrics.json missing"]]);
       });
   </script>
 </body>

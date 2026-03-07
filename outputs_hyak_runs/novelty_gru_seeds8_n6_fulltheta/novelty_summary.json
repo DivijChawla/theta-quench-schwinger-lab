@@ -1,0 +1,116 @@
+{
+  "config": "configs/novelty.yaml",
+  "n_sites": [
+    6
+  ],
+  "theta1_values": [
+    0.0,
+    0.8,
+    1.2,
+    1.6,
+    2.0,
+    2.4
+  ],
+  "seeds": [
+    11,
+    13,
+    17,
+    19,
+    23,
+    29,
+    31,
+    37
+  ],
+  "hidden_sizes": [
+    48
+  ],
+  "architectures": [
+    "gru"
+  ],
+  "bootstrap": 200,
+  "permutations": 300,
+  "approx_magic_samples": 0,
+  "runtime_seconds": 432.139475323027,
+  "quench_rows": 6,
+  "nnqs_conditions": 48,
+  "nnqs_snapshots": 240,
+  "negative_controls": {
+    "mean_null_random_label_r": -0.019223908856396785,
+    "mean_null_shuffled_time_r": 0.03762361940287428
+  },
+  "quench_stats": [
+    {
+      "n_sites": 6,
+      "spearman_theta_vs_max_lambda": 1.0,
+      "spearman_p_theta_vs_max_lambda": 0.0,
+      "spearman_theta_vs_max_magic": 1.0,
+      "spearman_p_theta_vs_max_magic": 0.0,
+      "pearson_peak_slope_lambda_vs_m2": 0.9930708411711563,
+      "pearson_p_peak_slope_lambda_vs_m2": 7.185351742290245e-05,
+      "monotonic_theta_vs_max_lambda": true,
+      "monotonic_theta_vs_max_magic": true
+    }
+  ],
+  "meta": {
+    "gru:pearson_magic_vs_val_nll": {
+      "pooled_r": 0.857159283007926,
+      "ci_low": 0.7869624129548947,
+      "ci_high": 0.905449804376546,
+      "i2": 0.0,
+      "n_studies": 40,
+      "positive_fraction": 1.0,
+      "significant_fraction": 0.3,
+      "combined_p": 3.581522953751758e-13,
+      "combined_q": 1.790761476875879e-12,
+      "verdict": "supported"
+    },
+    "gru:pearson_entropy_vs_val_nll": {
+      "pooled_r": 0.27447669621023346,
+      "ci_low": 0.062482707613527144,
+      "ci_high": 0.46277243632228005,
+      "i2": 0.0,
+      "n_studies": 40,
+      "positive_fraction": 0.825,
+      "significant_fraction": 0.0,
+      "combined_p": 0.9997505842769611,
+      "combined_q": 0.9997505842769611,
+      "verdict": "mixed"
+    },
+    "gru:pearson_magic_vs_val_nll_partial_entropy": {
+      "pooled_r": 0.9130621272814606,
+      "ci_low": 0.868390982634726,
+      "ci_high": 0.9430331511742397,
+      "i2": 0.0,
+      "n_studies": 40,
+      "positive_fraction": 1.0,
+      "significant_fraction": 0.25,
+      "combined_p": 8.042372903061457e-11,
+      "combined_q": 2.0105932257653642e-10,
+      "verdict": "supported"
+    },
+    "gru:pearson_magic_vs_kl": {
+      "pooled_r": -0.5077255966748129,
+      "ci_low": -0.6520146954966197,
+      "ci_high": -0.32794688347073375,
+      "i2": 0.0,
+      "n_studies": 40,
+      "positive_fraction": 0.175,
+      "significant_fraction": 0.15,
+      "combined_p": 0.01808686585216553,
+      "combined_q": 0.03014477642027588,
+      "verdict": "unsupported"
+    },
+    "gru:pearson_magic_vs_tv": {
+      "pooled_r": -0.3208535425802635,
+      "ci_low": -0.501817914784193,
+      "ci_high": -0.11297923708228577,
+      "i2": 0.0,
+      "n_studies": 40,
+      "positive_fraction": 0.325,
+      "significant_fraction": 0.025,
+      "combined_p": 0.5144188967659138,
+      "combined_q": 0.6430236209573923,
+      "verdict": "unsupported"
+    }
+  }
+}

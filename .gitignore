@@ -12,6 +12,8 @@ __pycache__/
 # Generated runtime outputs (rebuildable)
 outputs/
 outputs_smoke/
+outputs_hyak_sync/
+report/main.pdf
 report/figs/
 docs_ci/
 artifacts/

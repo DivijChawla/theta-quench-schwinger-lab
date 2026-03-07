@@ -18,7 +18,7 @@
 \maketitle
 
 \begin{abstract}
-This note reports evidence for a conditional claim: in a clearly specified post-quench corridor, higher stabilizer-Renyi magic is associated with worse NNQS learnability (higher validation NLL), including after entropy control. The testbed is the $(1+1)$D open-boundary lattice Schwinger model with exact small-$N$ dynamics ($N\lesssim 12$), supplemented by cross-family stress tests (TFIM, XXZ, ANNNI). We compute Loschmidt diagnostics, correlators, entanglement, and magic $M_\alpha$, then evaluate learnability across GRU, MADE, RBM, and independent baselines with bootstrap/permutation/FDR gates. The data support a robust entropy-controlled slope law in the tested corridor and cross-family cells, while strict all-regime and theorem-level universal statements are not supported.
+This note reports evidence for a conditional claim: in a clearly specified post-quench corridor, higher stabilizer-Renyi magic is associated with worse NNQS learnability (higher validation NLL), including after entropy control. The testbed is the $(1+1)$D open-boundary lattice Schwinger model with exact small-$N$ dynamics ($N\lesssim 12$), supplemented by cross-family stress tests (TFIM, XXZ, ANNNI). We compute Loschmidt diagnostics, correlators, entanglement, and magic $M_\alpha$, then evaluate learnability across GRU, MADE, RBM, and independent baselines with bootstrap/permutation/FDR gates. Additional checkpoint-GPU replications on Hyak strengthen the baseline cross-architecture evidence (GRU, MADE, RBM), support only the entropy-controlled endpoint in the current exact $N=10$ rerun, and sharpen the regime boundary by marking heavy-mass and strong-coupling alternates as mixed/unsupported. The data support a robust entropy-controlled slope law in the tested corridor and cross-family cells, while strict all-regime and theorem-level universal statements are not supported.
 \end{abstract}
 
 \section{Introduction}
@@ -156,6 +156,29 @@ We enforce and report:
 Baseline ($N=6,8$) cross-architecture runs support \texttt{magic $\rightarrow$ validation NLL} and the entropy-controlled variant. A higher-seed full-$\theta$ rerun remains supported. However, stronger $N=10$ exact-magic stress runs and multi-regime replications show that this relation is not universal under current settings. The defensible statement is therefore conditional: magic--learnability coupling is regime- and size-dependent in this small-$N$ exact study.
 
 Gate status is tracked in a standardized effect registry (\path{outputs/stage1_prxq/stage1/effect_registry.json}) with explicit flags for headline-region support and documented boundary failures.
+
+\subsection{Hyak checkpoint-GPU replication update}
+To tighten the evidence package beyond the original workstation runs, we executed additional checkpoint-GPU replications on Hyak and synced the outputs back into the repo under \path{outputs_hyak_runs/}. These runs do not change the qualitative claim; they make it more precise. In the main corridor, the baseline architecture story is stronger than before: GRU, MADE, and RBM all reproduce a positive magic--validation-NLL relation, and the entropy-controlled endpoint remains positive in each case. The current exact-$N=10$ rerun remains noisy at the raw-correlation level, but the entropy-controlled endpoint stays positive across GRU, RBM, and independent baselines. Alternate regimes sharpen the support boundary rather than extending it: heavy-mass is mixed and strong-coupling is unsupported.
+
+\begin{table}[tbp]
+\centering
+\small
+\begin{tabular}{p{0.26\linewidth}p{0.27\linewidth}p{0.17\linewidth}p{0.14\linewidth}}
+\toprule
+Replication run & Endpoint summary & Pooled effect & Verdict \\
+\midrule
+GRU baseline full-$\theta$, $N=6$ & \texttt{magic $\rightarrow$ val NLL} & $r=0.857$, $q=1.79\times 10^{-12}$ & supported \\
+GRU baseline full-$\theta$, $N=6$ & \texttt{magic $\rightarrow$ val NLL $|$ entropy} & $r=0.913$, $q=2.01\times 10^{-10}$ & supported \\
+MADE, $N=6,8$ & \texttt{magic $\rightarrow$ val NLL $|$ entropy} & $r=0.745$, $q=3.10\times 10^{-6}$ & supported \\
+RBM, $N=6,8$ & \texttt{magic $\rightarrow$ val NLL $|$ entropy} & $r=0.896$, $q=2.39\times 10^{-18}$ & supported \\
+Exact $N=10$ (GRU/RBM/independent) & raw \texttt{magic $\rightarrow$ val NLL} & opposite-sign / noisy in this rerun & unsupported \\
+Exact $N=10$ (GRU/RBM/independent) & \texttt{magic $\rightarrow$ val NLL $|$ entropy} & $r\approx 0.50$--$0.58$ & supported \\
+Heavy-mass alternate regime & primary and entropy-controlled endpoints & positive but unstable across architectures & mixed \\
+Strong-coupling alternate regime & primary and entropy-controlled endpoints & no stable positive effect & unsupported \\
+\bottomrule
+\end{tabular}
+\caption{Completed Hyak checkpoint-GPU replications used to update the scoped claim. Summary files are stored under \texttt{outputs\_hyak\_runs/}.}
+\end{table}
 
 \section{Cross-model expansion (Schwinger + TFIM)}
 To stress-test generalization, we augment Schwinger outputs with a second many-body family (TFIM), and evaluate a dynamical corridor defined by large Loschmidt-rate conditions. We report:

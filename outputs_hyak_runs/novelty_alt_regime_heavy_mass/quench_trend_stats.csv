@@ -1,0 +1,2 @@
+n_sites,spearman_theta_vs_max_lambda,spearman_p_theta_vs_max_lambda,spearman_theta_vs_max_magic,spearman_p_theta_vs_max_magic,pearson_peak_slope_lambda_vs_m2,pearson_p_peak_slope_lambda_vs_m2,monotonic_theta_vs_max_lambda,monotonic_theta_vs_max_magic
+6,1.0,0.0,1.0,0.0,0.9986602986521234,0.0013397013478766429,True,True

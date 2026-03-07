@@ -7,6 +7,11 @@ Core scoped hypothesis:
 - In baseline small-\(N\) exact simulations, higher stabilizer magic tends to coincide with harder NNQS fitting (higher validation NLL).
 - Correlation-sign behavior is **not universal** in current data, but an entropy-controlled slope law is supported in the Stage 2 corridor.
 
+Hyak replication update:
+- checkpoint-GPU reruns strengthened the baseline cross-architecture evidence: GRU, MADE, and RBM all reproduced a positive `magic -> validation NLL` trend in the main corridor.
+- the current exact `N=10` rerun remained noisy at the raw-correlation level, but the entropy-controlled endpoint stayed positive across GRU / RBM / independent baselines.
+- alternate regimes sharpened the claim boundary: heavy-mass is mixed, strong-coupling is unsupported.
+
 ## Key Results (30-second view)
 
 | Transition + Magic Hook | Learnability Hook |
@@ -15,6 +20,29 @@ Core scoped hypothesis:
 | Loschmidt-rate structure co-evolves with stabilizer Renyi magic \(M_2(t)\). | In baseline small-\(N\) settings, higher snapshot magic correlates with worse NNQS validation loss. |
 
 Live page: [GitHub Pages](https://divijchawla.github.io/theta-quench-schwinger-lab/)
+
+## Hyak Replication Snapshot
+
+Completed checkpoint-GPU replications (synced back under `outputs_hyak_runs/`) tightened the main empirical claim:
+
+| Run | Main endpoint | Result |
+|---|---|---|
+| GRU baseline full-\(\theta\), `N=6` | pooled `magic -> val NLL` | `r=0.857`, `q=1.79e-12`, supported |
+| GRU baseline full-\(\theta\), `N=6` | pooled `magic -> val NLL | entropy` | `r=0.913`, `q=2.01e-10`, supported |
+| MADE, `N=6,8` | pooled `magic -> val NLL | entropy` | `r=0.745`, `q=3.10e-06`, supported |
+| RBM, `N=6,8` | pooled `magic -> val NLL | entropy` | `r=0.896`, `q=2.39e-18`, supported |
+| exact `N=10` | raw `magic -> val NLL` | unsupported in current rerun |
+| exact `N=10` | `magic -> val NLL | entropy` | positive across GRU / RBM / independent (`r≈0.50–0.58`) |
+| heavy-mass alternate regime | primary endpoint | mixed |
+| strong-coupling alternate regime | primary endpoint | unsupported |
+
+These files are inspectable in-repo:
+- `outputs_hyak_runs/novelty_gru_seeds8_n6_fulltheta/novelty_summary.json`
+- `outputs_hyak_runs/novelty_n10_exact_power/novelty_summary.json`
+- `outputs_hyak_runs/novelty_arch_made_n68/novelty_summary.json`
+- `outputs_hyak_runs/novelty_arch_rbm_n68/novelty_summary.json`
+- `outputs_hyak_runs/novelty_alt_regime_heavy_mass/novelty_summary.json`
+- `outputs_hyak_runs/novelty_alt_regime_strong_coupling/novelty_summary.json`
 
 ## One-command Reproduction
 
@@ -131,13 +159,20 @@ Primary outputs:
 - `outputs/stage4_prl/thermo_theory_v5/stage4_summary.json`
 - `outputs/stage5_prx/external_regime_v1/stage5_summary.json`
 - `outputs/stage5_prx/stage5/effect_registry.json`
+- `outputs_hyak_runs/novelty_gru_seeds8_n6_fulltheta/novelty_summary.json`
+- `outputs_hyak_runs/novelty_n10_exact_power/novelty_summary.json`
+- `outputs_hyak_runs/novelty_arch_made_n68/novelty_summary.json`
+- `outputs_hyak_runs/novelty_arch_rbm_n68/novelty_summary.json`
 
 ## Current Claim Gate
 
 Safe claims supported by current evidence:
 - robust small-\(N\), cross-architecture baseline evidence for `magic -> validation NLL`
 - baseline evidence remains after entropy control (`magic -> val NLL | entropy`)
-- stage2 cross-model corridor evidence supports an **all-architecture universal beta-law** (`beta_magic > 0` with entropy control, robust across quantiles)
+- Hyak checkpoint-GPU replications strengthen the baseline architecture story: GRU (`r=0.857` raw / `0.913` partial), MADE (`0.755` raw / `0.745` partial), and RBM (`0.842` raw / `0.896` partial) are all supported in the main corridor
+- exact `N=10` Hyak reruns support the entropy-controlled endpoint across GRU / RBM / independent, while the raw endpoint remains unsupported in the current exact setup
+- heavy-mass reruns are mixed and strong-coupling reruns are unsupported, reinforcing the regime-boundary interpretation
+- stage2 cross-model corridor evidence supports a corridor-level positive beta-law (`beta_magic > 0` with entropy control, robust across quantiles in the tested architectures and cells)
 - stage2 correlation-sign consistency is supported in expressive models (GRU/MADE), but not all architectures
 - stage3 extension (adding XXZ + permutation-FDR null tests + size stress through `N=12` in expressive architectures) supports both beta-law and sign-law gates in the tested corridor
 - stage4 thermodynamic extrapolation and quantile lower-envelope gates are positive for the tested Stage 3 corridor cells

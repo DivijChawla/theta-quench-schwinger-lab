@@ -1,0 +1,231 @@
+{
+  "config": "configs/alt_regime_heavy_mass.yaml",
+  "n_sites": [
+    6
+  ],
+  "theta1_values": [
+    0.0,
+    0.9,
+    1.8,
+    2.7
+  ],
+  "seeds": [
+    11,
+    17,
+    23
+  ],
+  "hidden_sizes": [
+    48
+  ],
+  "architectures": [
+    "gru",
+    "rbm",
+    "independent"
+  ],
+  "bootstrap": 200,
+  "permutations": 300,
+  "approx_magic_samples": 0,
+  "runtime_seconds": 229.0935269589536,
+  "quench_rows": 4,
+  "nnqs_conditions": 36,
+  "nnqs_snapshots": 144,
+  "negative_controls": {
+    "mean_null_random_label_r": 0.004028290559419905,
+    "mean_null_shuffled_time_r": -0.01303994298958838
+  },
+  "quench_stats": [
+    {
+      "n_sites": 6,
+      "spearman_theta_vs_max_lambda": 1.0,
+      "spearman_p_theta_vs_max_lambda": 0.0,
+      "spearman_theta_vs_max_magic": 1.0,
+      "spearman_p_theta_vs_max_magic": 0.0,
+      "pearson_peak_slope_lambda_vs_m2": 0.9986602986521234,
+      "pearson_p_peak_slope_lambda_vs_m2": 0.0013397013478766429,
+      "monotonic_theta_vs_max_lambda": true,
+      "monotonic_theta_vs_max_magic": true
+    }
+  ],
+  "meta": {
+    "gru:pearson_magic_vs_val_nll": {
+      "pooled_r": 0.2492130017810774,
+      "ci_low": -0.3788873081087505,
+      "ci_high": 0.7201260942934937,
+      "i2": 0.4403723725374484,
+      "n_studies": 9,
+      "positive_fraction": 0.6666666666666666,
+      "significant_fraction": 0.1111111111111111,
+      "combined_p": 0.11446621571887672,
+      "combined_q": 0.24528474796902153,
+      "verdict": "mixed"
+    },
+    "gru:pearson_entropy_vs_val_nll": {
+      "pooled_r": -0.11329694969952624,
+      "ci_low": -0.645250970551503,
+      "ci_high": 0.4926456282101535,
+      "i2": 0.0,
+      "n_studies": 9,
+      "positive_fraction": 0.6666666666666666,
+      "significant_fraction": 0.0,
+      "combined_p": 0.9428711239088419,
+      "combined_q": 0.9996207690053335,
+      "verdict": "unsupported"
+    },
+    "gru:pearson_magic_vs_val_nll_partial_entropy": {
+      "pooled_r": 0.2810468450375934,
+      "ci_low": -0.3491847528615527,
+      "ci_high": 0.7362092696960614,
+      "i2": 0.5442327303405232,
+      "n_studies": 9,
+      "positive_fraction": 0.6666666666666666,
+      "significant_fraction": 0.0,
+      "combined_p": 0.3839861939597386,
+      "combined_q": 0.5236175372178254,
+      "verdict": "mixed"
+    },
+    "gru:pearson_magic_vs_kl": {
+      "pooled_r": -0.37627248835591093,
+      "ci_low": -0.7814342323388498,
+      "ci_high": 0.2520710120594781,
+      "i2": 0.0,
+      "n_studies": 9,
+      "positive_fraction": 0.2222222222222222,
+      "significant_fraction": 0.0,
+      "combined_p": 0.5030556979030224,
+      "combined_q": 0.628819622378778,
+      "verdict": "unsupported"
+    },
+    "gru:pearson_magic_vs_tv": {
+      "pooled_r": -0.39099987034633216,
+      "ci_low": -0.7880681453168457,
+      "ci_high": 0.23582964016891342,
+      "i2": 0.26554889297793516,
+      "n_studies": 9,
+      "positive_fraction": 0.3333333333333333,
+      "significant_fraction": 0.0,
+      "combined_p": 0.2848552346554009,
+      "combined_q": 0.42728285198310134,
+      "verdict": "unsupported"
+    },
+    "independent:pearson_magic_vs_val_nll": {
+      "pooled_r": 0.6588508805571276,
+      "ci_low": 0.13658798174411796,
+      "ci_high": 0.8945227936212086,
+      "i2": 0.6147068286710262,
+      "n_studies": 9,
+      "positive_fraction": 0.6666666666666666,
+      "significant_fraction": 0.3333333333333333,
+      "combined_p": 0.029848351523846135,
+      "combined_q": 0.11193131821442301,
+      "verdict": "mixed"
+    },
+    "independent:pearson_entropy_vs_val_nll": {
+      "pooled_r": 0.12864047275983187,
+      "ci_low": -0.4807629690740106,
+      "ci_high": 0.6542482907923924,
+      "i2": 0.0,
+      "n_studies": 9,
+      "positive_fraction": 0.7777777777777778,
+      "significant_fraction": 0.0,
+      "combined_p": 0.9995162844165307,
+      "combined_q": 0.9996207690053335,
+      "verdict": "unsupported"
+    },
+    "independent:pearson_magic_vs_val_nll_partial_entropy": {
+      "pooled_r": 0.4346333504481866,
+      "ci_low": -0.18556327264131076,
+      "ci_high": 0.807195856519514,
+      "i2": 0.8663713334617498,
+      "n_studies": 9,
+      "positive_fraction": 0.6666666666666666,
+      "significant_fraction": 0.1111111111111111,
+      "combined_p": 0.2218703474827987,
+      "combined_q": 0.3697839124713312,
+      "verdict": "mixed"
+    },
+    "independent:pearson_magic_vs_kl": {
+      "pooled_r": 0.9834273046807648,
+      "ci_low": 0.9401197615820046,
+      "ci_high": 0.9954861465734466,
+      "i2": 0.0,
+      "n_studies": 9,
+      "positive_fraction": 1.0,
+      "significant_fraction": 0.2222222222222222,
+      "combined_p": 0.00021163852562741542,
+      "combined_q": 0.0015872889422056157,
+      "verdict": "supported"
+    },
+    "independent:pearson_magic_vs_tv": {
+      "pooled_r": 0.792328791852252,
+      "ci_low": 0.400567026644269,
+      "ci_high": 0.939172912645043,
+      "i2": 0.0,
+      "n_studies": 9,
+      "positive_fraction": 0.8888888888888888,
+      "significant_fraction": 0.1111111111111111,
+      "combined_p": 0.05088039537083471,
+      "combined_q": 0.1272009884270868,
+      "verdict": "mixed"
+    },
+    "rbm:pearson_magic_vs_val_nll": {
+      "pooled_r": 0.650856991139418,
+      "ci_low": 0.12282743989911227,
+      "ci_high": 0.8916906637313154,
+      "i2": 0.6092829327419893,
+      "n_studies": 9,
+      "positive_fraction": 0.6666666666666666,
+      "significant_fraction": 0.3333333333333333,
+      "combined_p": 0.029848351523846135,
+      "combined_q": 0.11193131821442301,
+      "verdict": "mixed"
+    },
+    "rbm:pearson_entropy_vs_val_nll": {
+      "pooled_r": 0.1173044937093238,
+      "ci_low": -0.4895636693032408,
+      "ci_high": 0.6476152868777231,
+      "i2": 0.0,
+      "n_studies": 9,
+      "positive_fraction": 0.7777777777777778,
+      "significant_fraction": 0.0,
+      "combined_p": 0.9996207690053335,
+      "combined_q": 0.9996207690053335,
+      "verdict": "unsupported"
+    },
+    "rbm:pearson_magic_vs_val_nll_partial_entropy": {
+      "pooled_r": 0.30716076033362394,
+      "ci_low": -0.3238354380443558,
+      "ci_high": 0.7490295961351217,
+      "i2": 0.8862846050733901,
+      "n_studies": 9,
+      "positive_fraction": 0.6666666666666666,
+      "significant_fraction": 0.1111111111111111,
+      "combined_p": 0.21789583739216858,
+      "combined_q": 0.3697839124713312,
+      "verdict": "mixed"
+    },
+    "rbm:pearson_magic_vs_kl": {
+      "pooled_r": 0.9845190906482533,
+      "ci_low": 0.9439840122493833,
+      "ci_high": 0.9957852010663085,
+      "i2": 0.0,
+      "n_studies": 9,
+      "positive_fraction": 1.0,
+      "significant_fraction": 0.2222222222222222,
+      "combined_p": 0.00021163852562741542,
+      "combined_q": 0.0015872889422056157,
+      "verdict": "supported"
+    },
+    "rbm:pearson_magic_vs_tv": {
+      "pooled_r": 0.8101550366611953,
+      "ci_low": 0.4415436560393342,
+      "ci_high": 0.9447825640907694,
+      "i2": 0.0,
+      "n_studies": 9,
+      "positive_fraction": 0.8888888888888888,
+      "significant_fraction": 0.1111111111111111,
+      "combined_p": 0.04903179291543061,
+      "combined_q": 0.1272009884270868,
+      "verdict": "mixed"
+    }
+  }
+}

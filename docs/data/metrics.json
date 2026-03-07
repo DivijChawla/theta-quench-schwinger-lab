@@ -33,6 +33,16 @@
     "magic_min": 0.8225537753672985,
     "magic_max": 1.1010371437912188
   },
+  "hyak": {
+    "gru_baseline_raw_r": 0.857159283007926,
+    "gru_baseline_partial_r": 0.9130621272814606,
+    "made_partial_r": 0.7445705610056088,
+    "rbm_partial_r": 0.8959640951064674,
+    "n10_partial_gru_r": 0.5791579110769245,
+    "n10_partial_status": "supported after entropy control",
+    "heavy_mass_status": "mixed",
+    "strong_coupling_status": "unsupported"
+  },
   "copied_figures": [
     "fig1_loschmidt_family.png",
     "fig2_magic_lambda_overlay.png",
@@ -60,6 +70,10 @@
     "fig_stage5_regime_minimax.png",
     "fig_stage5_regime_heatmap.png",
     "fig_stage5_quantile_bound.png",
+    "hyak_gru_global_scatter.png",
+    "hyak_n10_global_scatter.png",
+    "hyak_made_global_scatter.png",
+    "hyak_rbm_global_scatter.png",
     "project_capsule.gif",
     "quench_dynamics.gif"
   ]
