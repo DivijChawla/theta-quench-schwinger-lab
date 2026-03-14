@@ -3,6 +3,12 @@
 
 A reproducible mini-research toolkit for lattice Schwinger-model \(\theta\)-quench dynamics, stabilizer magic, and NNQS learnability.
 
+## Project provenance
+
+This repository was motivated directly by the Institute for Nuclear Theory (INT) INTURN 26-3 project theme, "Quantum Magic in Topological Vacuum Dynamics" on the [INTURN open projects page](https://www.int.washington.edu/index.php/inturn).
+
+That means the motivating research direction did not originate independently with this repo. What is original here is the implementation and exploratory evidence package: the code, exact-dynamics pipeline, NNQS fitting study, replication runs, and the scoped empirical claims reported below are my own independent undergraduate work built in response to that project theme.
+
 Core scoped hypothesis:
 - In baseline small-\(N\) exact simulations, higher stabilizer magic tends to coincide with harder NNQS fitting (higher validation NLL).
 - Correlation-sign behavior is **not universal** in current data, but an entropy-controlled slope law is supported in the Stage 2 corridor.
