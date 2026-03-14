@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from tqm.config import NNQSConfig
 from tqm.nnqs.train import train_nnqs_on_state
+
+pytest.importorskip("torch")
 
 
 def _basis_state(n_sites: int, index: int = 0) -> np.ndarray:

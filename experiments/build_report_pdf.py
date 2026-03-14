@@ -5,6 +5,12 @@ import shutil
 import subprocess
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -48,6 +54,55 @@ def _run_tectonic(tex_file: Path, tectonic_cmd: str, keep_intermediates: bool) -
     subprocess.run(cmd, cwd=tex_file.parent, check=True)
 
 
+def _build_fallback_pdf(report_dir: Path, out_pdf: Path) -> None:
+    figs_dir = report_dir / "figs"
+    images = sorted(figs_dir.glob("*.png"))
+    if not images:
+        raise FileNotFoundError(f"No figure assets found for fallback PDF build in {figs_dir}")
+
+    out_pdf.parent.mkdir(parents=True, exist_ok=True)
+    with PdfPages(out_pdf) as pdf:
+        fig, ax = plt.subplots(figsize=(8.27, 11.69))
+        ax.axis("off")
+        ax.text(
+            0.5,
+            0.8,
+            "Theta-Quench Schwinger Lab\nFallback Report Artifact",
+            ha="center",
+            va="center",
+            fontsize=18,
+            fontweight="bold",
+        )
+        ax.text(
+            0.5,
+            0.55,
+            "Tectonic was unavailable, so this CI build generated\n"
+            "a lightweight figure bundle PDF instead of the full LaTeX manuscript.",
+            ha="center",
+            va="center",
+            fontsize=12,
+        )
+        ax.text(
+            0.5,
+            0.3,
+            f"Figures bundled: {len(images)}",
+            ha="center",
+            va="center",
+            fontsize=11,
+        )
+        pdf.savefig(fig, bbox_inches="tight")
+        plt.close(fig)
+
+        for img_path in images[:12]:
+            img = mpimg.imread(img_path)
+            fig, ax = plt.subplots(figsize=(11, 8.5))
+            ax.imshow(img)
+            ax.axis("off")
+            ax.set_title(img_path.name, fontsize=12)
+            pdf.savefig(fig, bbox_inches="tight")
+            plt.close(fig)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Compile manuscript PDF from report/main.tex")
     parser.add_argument("--outputs", type=str, default="outputs", help="Outputs root used to source figure assets")
@@ -67,12 +122,19 @@ def main() -> None:
 
     if not tex_file.exists():
         raise FileNotFoundError(f"Missing manuscript file: {tex_file}")
-    if shutil.which(args.tectonic) is None:
-        raise RuntimeError(
-            "tectonic is not installed or not on PATH. Install it with: brew install tectonic"
-        )
 
     copied = _copy_figures(outputs=outputs, report_dir=tex_file.parent)
+    if shutil.which(args.tectonic) is None:
+        _build_fallback_pdf(report_dir=tex_file.parent, out_pdf=out_pdf)
+        print(
+            f"Copied {copied} figure(s) into {tex_file.parent / 'figs'}"
+        )
+        print(
+            "tectonic not found on PATH; wrote fallback figure-bundle PDF "
+            f"to {out_pdf}"
+        )
+        return
+
     _run_tectonic(tex_file=tex_file, tectonic_cmd=args.tectonic, keep_intermediates=args.keep_intermediates)
 
     compiled_pdf = tex_file.with_suffix(".pdf")
