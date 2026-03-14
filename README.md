@@ -5,7 +5,7 @@ A reproducible mini-research toolkit for lattice Schwinger-model \(\theta\)-quen
 
 ## Project provenance
 
-This repository was motivated directly by the Institute for Nuclear Theory (INT) INTURN 26-3 project theme, "Quantum Magic in Topological Vacuum Dynamics" on the [INTURN open projects page](https://www.int.washington.edu/index.php/inturn).
+This repository was motivated directly by the Institute for Nuclear Theory (INT) [INTURN 26-3 project theme](https://www.int.washington.edu/index.php/inturn-26-3), "Quantum Magic in Topological Vacuum Dynamics."
 
 That means the motivating research direction did not originate independently with this repo. What is original here is the implementation and exploratory evidence package: the code, exact-dynamics pipeline, NNQS fitting study, replication runs, and the scoped empirical claims reported below are my own independent undergraduate work built in response to that project theme.
 
